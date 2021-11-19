@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useAutUser } from "./context/AuthContext";
 import UnAuthApp from "./auth/UnAuthApp";

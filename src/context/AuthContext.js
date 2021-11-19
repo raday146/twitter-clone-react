@@ -7,6 +7,7 @@ const AuthContext = React.createContext(null);
 export function AuthProvider({ children }) {
   const { data, loading } = useQuery("AuthProvider", authenticate);
   if (loading) {
+    console.log("splash on!");
     return <Splash />;
   }
   const authUser = data || null;
