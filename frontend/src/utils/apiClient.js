@@ -1,15 +1,51 @@
 import axios from "axios";
 const client = axios.create();
 
-export async function authenticate() {}
+export const authenticate = async () => {
+  const { data } = await client.get("api/users/login");
+  return data;
+};
 
-export async function login() {}
+export const login = async (email, password) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-export async function singup() {}
+    const { data } = await client.post(
+      "api/users/login",
+      { email, password },
+      config
+    );
+    return data;
+  } catch (error) {
+    return error.message;
+  }
+};
 
-export async function logout() {}
-export async function getNotifactions() {}
+export const singup = async (name, email, password) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-export async function readNotifactions() {}
-export async function getPosts() {}
-export async function getReplies() {}
+    await client.post("api/users/signup", { name, email, password }, config);
+    window.location.pathname = "/";
+  } catch (error) {
+    return error.message;
+  }
+};
+
+export const logout = async () => {
+  await client.get("api/users/logout");
+  window.location.pathname = "/";
+};
+export const getNotifactions = async () => {};
+
+export const readNotifactions = async () => {};
+export const getPosts = async () => {};
+export const getReplies = async () => {};
