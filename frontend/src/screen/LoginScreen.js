@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Col, Figure, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { login } from "../utils/api-client";
-import { withStyles } from "@mui/material/styles";
+import { login } from "../utils/apiClient";
+import { withStyles } from "@material-ui/styles";
 import styles from "../styles/RegisterScreenStyle";
 import { validate } from "../utils/validate";
 

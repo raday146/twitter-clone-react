@@ -44,8 +44,25 @@ export const logout = async () => {
   await client.get("api/users/logout");
   window.location.pathname = "/";
 };
-export const getNotifactions = async () => {};
-
+export const getNotifications = async () => {};
 export const readNotifactions = async () => {};
 export const getPosts = async () => {};
 export const getReplies = async () => {};
+export const getUserSuggestions = async () => {};
+export const unfollowUser = async () => {};
+export const followUser = async () => {};
+export const getTrends = async () => {};
+export const createPost = async () => {};
+export const getFriends = async () => {};
+export const getPostById = async () => {};
+export const getPostLikes = async () => {};
+export const getPostReposts = async () => {};
+export const getSearchResults = async () => {};
+export const getUserFollowers = async () => {};
+export const getUserTimeline = async () => {};
+export const readNotification = async () => {};
+export const updateUserDetails = async () => {};
+export const likePost = async () => {};
+export const repostPost = async () => {};
+export const unlikePost = async () => {};
+export const unrepostPost = async () => {};

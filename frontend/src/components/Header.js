@@ -1,12 +1,4 @@
 import { faTwitter } from "@fortawesome/free-brands-svg-icons/faTwitter";
-import { faBell } from "@fortawesome/free-regular-svg-icons/faBell";
-import { faComments } from "@fortawesome/free-regular-svg-icons/faComments";
-import { faEnvelope } from "@fortawesome/free-regular-svg-icons/faEnvelope";
-import { faListAlt } from "@fortawesome/free-regular-svg-icons/faListAlt";
-import { faUser } from "@fortawesome/free-regular-svg-icons/faUser";
-import { faEllipsisH } from "@fortawesome/free-solid-svg-icons/faEllipsisH";
-import { faHashtag } from "@fortawesome/free-solid-svg-icons/faHashtag";
-import { faHome } from "@fortawesome/free-solid-svg-icons/faHome";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Badge, Col } from "react-bootstrap";
@@ -14,57 +6,12 @@ import { useQuery } from "react-query";
 import MediaQuery from "react-responsive";
 import { Link, NavLink } from "react-router-dom";
 import { useAuthUser } from "../context/authContext";
-import { getNotifications } from "../utils/api-client";
-
+import { getNotifications } from "../utils/apiClient";
+import { headerList } from "../utils/OptionsList";
 export default function Header() {
   const authUser = useAuthUser();
   const { data: notifications } = useQuery("Notifications", getNotifications);
-
   const notificationsCount = notifications?.filter((n) => !n.read).length;
-
-  const list = [
-    {
-      name: "Home",
-      href: "/home",
-      icon: faHome,
-    },
-    {
-      name: "Explore",
-      href: "/explore",
-      icon: faHashtag,
-    },
-    {
-      name: "Profile",
-      href: `/user/${authUser?.screen_name}`,
-      icon: faUser,
-    },
-    {
-      name: "Notifications",
-      href: "/notifications",
-      icon: faBell,
-      count: notificationsCount,
-    },
-    {
-      name: "Chat Room",
-      href: "/chats",
-      icon: faComments,
-    },
-    {
-      name: "Settings",
-      href: "/settings",
-      icon: faEllipsisH,
-    },
-    {
-      name: "Messages",
-      href: "/messages",
-      icon: faEnvelope,
-    },
-    {
-      name: "Lists",
-      href: "/lists",
-      icon: faListAlt,
-    },
-  ];
 
   return (
     <Col className="d-flex flex-column align-items-end vh-100 overflow-y-auto mr-sm-n3 mr-md-0 mr-xl-3 hide-scroll">
@@ -77,15 +24,15 @@ export default function Header() {
         </Link>
       </div>
       <div className="ml-0 d-flex flex-column mb-2 align-items-start">
-        {list.map((item) => {
-          const badge = item.count ? (
+        {headerList.map((item) => {
+          const badge = notificationsCount ? (
             <>
               <Badge
                 className="position-absolute"
                 variant="primary"
                 style={{ top: 5, right: 5, left: "unset" }}
               >
-                {item.count}
+                {notificationsCount}
               </Badge>
               <span className="sr-only">new items</span>
             </>
@@ -96,7 +43,11 @@ export default function Header() {
               className="d-flex align-items-top position-relative"
             >
               <NavLink
-                to={item.href}
+                to={
+                  item.name === "Profile"
+                    ? `${item.href}/${authUser?.name}`
+                    : item.href
+                }
                 className="px-xl-2 py-xl-1 p-1 mb-1 mx-lg-0 mx-auto btn btn-naked-primary rounded-pill font-weight-bold btn-lg d-flex align-items-center"
                 activeClassName="active"
               >

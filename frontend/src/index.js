@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import AppProvider from "./providers/AppProvider";
 import reportWebVitals from "./reportWebVitals";
-
 ReactDOM.render(
   <AppProvider>
     <App />

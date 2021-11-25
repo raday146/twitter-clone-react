@@ -21,6 +21,21 @@ const followerSchema = mongoose.Schema({
     default: 0,
   },
 });
+
+const friendsSchema = mongoose.Schema({
+  users: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+  ],
+  numFriends: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+});
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -37,12 +52,28 @@ const userSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
+    defaultImage: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
     password: {
       type: String,
       required: true,
       select: false,
     },
+    location: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     followerSchema: [followerSchema],
+    friends: [friendsSchema],
+    favoritesCount: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     createdAt: Date,
     passwordChangedAt: Date,
     passwordResetToken: String,

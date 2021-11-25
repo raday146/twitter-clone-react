@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Col, Figure, Form } from "reac-bootstrap";
+import { Col, Figure, Form } from "react-bootstrap";
 import { withStyles } from "@material-ui/styles";
 import styles from "../styles/RegisterScreenStyle";
 import { Link } from "react-router-dom";

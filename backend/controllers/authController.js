@@ -77,4 +77,15 @@ const login = () =>
     }
   });
 
-export { signup, login };
+const logout = asyncHandler(async (req, res) => {
+  res.cookie("jwt", "loggedout", {
+    expires: new Date(Date.now() + 10 + 1000),
+    httpOnly: true,
+    secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+  });
+  res.status(200).json({
+    status: "logout successefuly!",
+  });
+});
+
+export { signup, login, logout };

@@ -1,6 +1,6 @@
 import express from "express";
 //import userController from "../controllers/userController.js";
-import { login, signup } from "../controllers/authController.js";
+import { login, signup, logout } from "../controllers/authController.js";
 
 const router = express.Router();
 
@@ -22,7 +22,7 @@ router.post("/signup", signup());
  * @access Public
  */
 
-router.post("/login", login());
+router.post("/login", login()).post("/logout", logout);
 /*
 router.use(protect);
 router
