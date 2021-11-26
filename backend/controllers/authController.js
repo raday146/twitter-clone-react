@@ -37,6 +37,7 @@ const signup = () =>
   asyncHandler(async (req, res, next) => {
     console.log("s");
     try {
+      console.log(req.body);
       const newUser = await User.create(req.body);
       createSendToken(newUser, 201, res);
     } catch (error) {

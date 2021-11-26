@@ -27,7 +27,7 @@ const LoginScreen = ({ classes }) => {
   }
 
   return (
-    <Col className={`${classes.root} mx-auto border px-3 pb-3`}>
+    <Col className={`${classes.root} mx-auto border px-3 pb-3 `}>
       <Figure className="d-flex flex-column align-items-center">
         <Figure.Image
           width={200}
@@ -68,15 +68,14 @@ const LoginScreen = ({ classes }) => {
           <div className="d-flex flex-column align-items-center">
             <button
               type="submit"
-              variant="primary"
-              className="btn btn-outline-primary btn-block rounded-pill font-weight-bold"
+              className={`${classes.button} btn btn-outline-primary rounded-pill`}
             >
               Log in
             </button>
             <small className="text-muted m-2">or</small>
             <Link
               to="/signup"
-              className="btn btn-primary btn-block rounded-pill font-weight-bold"
+              className={`${classes.button} btn btn-primary  rounded-pill`}
             >
               Sign up
             </Link>

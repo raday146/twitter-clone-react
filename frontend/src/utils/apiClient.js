@@ -1,12 +1,11 @@
 import axios from "axios";
-const client = axios.create();
 
-export const authenticate = async () => {
-  const { data } = await client.get("api/users/login");
+export const authenticate = () => async () => {
+  const { data } = await axios.get("/api/users/login");
   return data;
 };
 
-export const login = async (email, password) => {
+export const login = (name, email, password) => async () => {
   try {
     const config = {
       headers: {
@@ -14,8 +13,8 @@ export const login = async (email, password) => {
       },
     };
 
-    const { data } = await client.post(
-      "api/users/login",
+    const { data } = await axios.post(
+      "/api/users/login",
       { email, password },
       config
     );
@@ -25,26 +24,32 @@ export const login = async (email, password) => {
   }
 };
 
-export const singup = async (name, email, password) => {
+export const signup = (name, email, password) => async () => {
   try {
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
-
-    await client.post("api/users/signup", { name, email, password }, config);
+    console.log("here", name, email, password);
+    const { data } = await axios.post(
+      "/api/users/signup",
+      { name, email, password },
+      config
+    );
+    console.log(data);
     window.location.pathname = "/";
+    console.log("dd");
   } catch (error) {
-    return error.message;
+    return error;
   }
 };
 
-export const logout = async () => {
-  await client.get("api/users/logout");
+export const logout = () => async () => {
+  await axios.get("api/users/logout");
   window.location.pathname = "/";
 };
-export const getNotifications = async () => {};
+export const getNotifications = () => async () => {};
 export const readNotifactions = async () => {};
 export const getPosts = async () => {};
 export const getReplies = async () => {};

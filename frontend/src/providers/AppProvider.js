@@ -25,6 +25,7 @@ export default function AppProviders({ children }) {
       <AuthProvider>
         <BrowserRouter>
           {children}
+
           <ReactQueryDevtools />
         </BrowserRouter>
       </AuthProvider>

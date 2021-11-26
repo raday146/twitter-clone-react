@@ -1,21 +1,29 @@
+import React, { useEffect } from "react";
 import { faImage } from "@fortawesome/free-regular-svg-icons/faImage";
 import { faSmile } from "@fortawesome/free-regular-svg-icons/faSmile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import QuotedPost from "../components/QuotedPost";
 import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
-import React from "react";
 import { Alert, Modal, OverlayTrigger, Popover } from "react-bootstrap";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../context/authContext";
 import { createPost, getPostById } from "../utils/apiClient";
 import { isTextValid, validate } from "../utils/validate";
-
-export default function CreatePostModalScreen() {
+export default function CreatePostModalScreen({ location }) {
   const history = useNavigate();
   const quoteId = new URLSearchParams(history.location.search).get("quote");
   const replyId = new URLSearchParams(history.location.search).get("reply_to");
+  const auth = useAuthUser();
+  const redirect = location?.search ? location.search.split("=")[1] : "/login";
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!!!auth) {
+      navigate(redirect);
+    }
+  }, [auth, navigate, redirect]);
   const { data: quotePost } = useQuery(
     "QuotePost",
     () => getPostById(quoteId),

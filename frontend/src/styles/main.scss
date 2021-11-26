@@ -6,6 +6,7 @@ html {
 body {
   overflow-y: scroll;
   overflow-x: hidden;
+  background-color:#ffffff
 }
 a {
   color: $primary;
@@ -29,8 +30,8 @@ a {
 }
 button {
   font-family: inherit;
-  // font-size: inherit;
-  // font-weight: inherit;
+  font-size: revert;
+  font-weight: inherit;
   > span {
     margin: auto;
   }

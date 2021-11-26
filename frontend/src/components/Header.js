@@ -11,7 +11,9 @@ import { headerList } from "../utils/OptionsList";
 export default function Header() {
   const authUser = useAuthUser();
   const { data: notifications } = useQuery("Notifications", getNotifications);
-  const notificationsCount = notifications?.filter((n) => !n.read).length;
+  const notificationsCount = notifications?.filter
+    ? notifications.filter((n) => !n.read).length
+    : 0;
 
   return (
     <Col className="d-flex flex-column align-items-end vh-100 overflow-y-auto mr-sm-n3 mr-md-0 mr-xl-3 hide-scroll">

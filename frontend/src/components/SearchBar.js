@@ -1,4 +1,4 @@
-import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Form, InputGroup } from "react-bootstrap";
@@ -21,11 +21,9 @@ function SearchBar() {
         style={{ backgroundColor: "rgb(233,236,239)" }}
       >
         <InputGroup className="w-100">
-          <InputGroup.Prepend>
-            <InputGroup.Text>
-              <FontAwesomeIcon icon={faSearch} />
-            </InputGroup.Text>
-          </InputGroup.Prepend>
+          <InputGroup.Text>
+            <FontAwesomeIcon icon={faSearch} />
+          </InputGroup.Text>
           <Form.Control
             style={{ backgroundColor: "rgb(233,236,239)" }}
             size="sm"

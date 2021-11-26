@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons/faTwitter";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "./SearchBar";
 import { Link } from "react-router-dom";
 import { Navbar as Nav, Row, Container } from "react-bootstrap";
 
@@ -22,7 +22,17 @@ export default function Navbar() {
           <FontAwesomeIcon size="lg" icon={faTwitter} />
         </Nav.Brand>
         <SearchBar />
-        <Row className="ml-auto d-none d-lg-flex justify-content-end w-50">
+      </Container>
+    </Nav>
+  );
+}
+
+/***
+ * 
+ * 
+ * benef to searchBar 
+ * 
+ *    <Row className="ml-auto d-none d-lg-flex justify-content-end w-50">
           <Link
             to="/login"
             className="btn btn-outline-primary rounded-pill px-3 py-2 font-weight-bold"
@@ -36,7 +46,4 @@ export default function Navbar() {
             Sign up
           </Link>
         </Row>
-      </Container>
-    </Nav>
-  );
-}
+ */
