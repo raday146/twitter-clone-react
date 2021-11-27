@@ -19,8 +19,10 @@ export default function Feed() {
   } = useInfiniteQuery("Posts", getPosts);
 
   React.useEffect(() => {
-    const hasFinished = posts?.pages.some((p) => p.length < 20);
-    setHasFinished(hasFinished);
+    if (!!!posts) {
+      const hasFinished = !posts?.pages.some((p) => p.length < 20);
+      setHasFinished(hasFinished);
+    }
   }, [posts]);
 
   useBottomScrollListener(() => {

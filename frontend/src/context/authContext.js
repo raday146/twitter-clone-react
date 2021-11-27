@@ -5,12 +5,15 @@ import Splash from "../components/Splash";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const { data, loadding } = useQuery("AuthProvider", authenticate);
+  const data = window.localStorage.getItem("AuthProvider")
+    ? JSON.parse(window.localStorage.getItem("AuthProvider"))
+    : null;
+  //const { data, loadding } = useQuery("AuthProvider", authenticate);
 
-  if (loadding) {
+  /* if (loadding) {
     return <Splash />;
-  }
-  const authUser = !!!data ? null : "";
+  }*/
+  const authUser = data;
   console.log(authUser);
   return (
     <AuthContext.Provider value={authUser}>{children}</AuthContext.Provider>

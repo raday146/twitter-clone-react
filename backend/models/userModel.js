@@ -49,7 +49,8 @@ const userSchema = mongoose.Schema(
     },
     avatar: {
       type: String,
-      unique: true,
+      required: true,
+      default: "Unknown",
     },
     defaultImage: {
       type: Boolean,
@@ -64,8 +65,7 @@ const userSchema = mongoose.Schema(
     location: {
       type: String,
       required: true,
-      unique: true,
-      default: "unknown",
+      default: "Unknown",
     },
     followerSchema: [followerSchema],
     friends: [friendsSchema],

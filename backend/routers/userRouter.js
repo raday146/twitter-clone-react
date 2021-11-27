@@ -10,6 +10,7 @@ const router = express.Router();
  * @access Public
  */
 router.post("/signup", signup());
+
 /**
  * @description login user
  * @route POST/api/users/login

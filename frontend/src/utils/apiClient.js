@@ -7,7 +7,7 @@ export const authenticate = () => async () => {
   return data;
 };
 
-export const login = (name, email, password) => async () => {
+export const login = async (payload) => {
   console.log("befor");
   try {
     const config = {
@@ -15,30 +15,20 @@ export const login = (name, email, password) => async () => {
         "Content-Type": "application/json",
       },
     };
-
+    const { email, password } = payload;
     const { data } = await axios.post(
       "/api/users/login",
       { email, password },
       config
     );
-    return data;
+    window.localStorage.setItem("AuthProvider", JSON.stringify(data));
+    window.location.pathname = "/home";
   } catch (error) {
     return error.message;
   }
 };
 
-export async function signUp(name, email, password) {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  await clientApi.post("/api/users/signup", { name, email, password }, config);
-
-  window.location.assign("/settings/profile?redirected=true");
-}
-export const signup = (name, email, password) => async () => {
+export const signUp = async (name, email, password) => {
   try {
     console.log("start");
     const config = {
@@ -47,13 +37,14 @@ export const signup = (name, email, password) => async () => {
       },
     };
 
-    console.log("here", name, email, password);
     await clientApi.post(
       "/api/users/signup",
       { name, email, password },
       config
     );
-    //window.location.pathname = "/";
+    window.location.pathname = "/login";
+    //    window.location.assign("/settings/profile?redirected=true");
+
     console.log("dd");
   } catch (error) {
     return error;

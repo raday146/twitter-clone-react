@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Col, Figure, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../utils/apiClient";
+import { useMutation, useQueryClient } from "react-query";
 import { withStyles } from "@material-ui/styles";
 import styles from "../styles/RegisterScreenStyle";
 import { validate } from "../utils/validate";
@@ -9,8 +10,11 @@ import { validate } from "../utils/validate";
 const LoginScreen = ({ classes }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  //const queryClient = useQueryClient();
+  //const user = queryClient.getQueryCache().get("AuthProvider");
+  //const navigate = useNavigate();
+  //const loggedin = useMutation(login, {onSuccess: () => queryClient.invalidateQueries("AuthProvider"),});
 
-  useEffect(() => {}, []);
   async function handleSubmit(e) {
     try {
       e.preventDefault();
@@ -25,7 +29,8 @@ const LoginScreen = ({ classes }) => {
       } else if (!!!password) {
         setError("Password field must be filled");
       } else {
-        login(email, password);
+        //loggedin.mutate({ email, password });
+        login({ email, password });
         console.log("loginn");
       }
     } catch (error) {
