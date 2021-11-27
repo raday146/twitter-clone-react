@@ -1,11 +1,14 @@
 import axios from "axios";
-
+const clientApi = axios.create({
+  baseURL: "http://localhost:3000/",
+});
 export const authenticate = () => async () => {
   const { data } = await axios.get("/api/users/login");
   return data;
 };
 
 export const login = (name, email, password) => async () => {
+  console.log("befor");
   try {
     const config = {
       headers: {
@@ -24,21 +27,33 @@ export const login = (name, email, password) => async () => {
   }
 };
 
+export async function signUp(name, email, password) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  await clientApi.post("/api/users/signup", { name, email, password }, config);
+
+  window.location.assign("/settings/profile?redirected=true");
+}
 export const signup = (name, email, password) => async () => {
   try {
+    console.log("start");
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
+
     console.log("here", name, email, password);
-    const { data } = await axios.post(
+    await clientApi.post(
       "/api/users/signup",
       { name, email, password },
       config
     );
-    console.log(data);
-    window.location.pathname = "/";
+    //window.location.pathname = "/";
     console.log("dd");
   } catch (error) {
     return error;

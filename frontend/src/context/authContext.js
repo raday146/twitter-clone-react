@@ -10,8 +10,8 @@ export function AuthProvider({ children }) {
   if (loadding) {
     return <Splash />;
   }
-  const authUser = data || null;
-
+  const authUser = !!!data ? null : "";
+  console.log(authUser);
   return (
     <AuthContext.Provider value={authUser}>{children}</AuthContext.Provider>
   );

@@ -18,7 +18,16 @@ const LoginScreen = ({ classes }) => {
       setError(null);
       const email = e.target.elements.email.value;
       const password = e.target.elements.password.value;
-      await login(email, password);
+      if (!!!email && !!!password) {
+        setError("Fields must be filled");
+      } else if (!!!email) {
+        setError("Email field must be filled");
+      } else if (!!!password) {
+        setError("Password field must be filled");
+      } else {
+        login(email, password);
+        console.log("loginn");
+      }
     } catch (error) {
       setError(error.message);
     } finally {

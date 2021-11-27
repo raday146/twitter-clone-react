@@ -35,7 +35,7 @@ const createSendToken = (user, statusCode, res) => {
 
 const signup = () =>
   asyncHandler(async (req, res, next) => {
-    console.log("s");
+    console.log("signup 1");
     try {
       console.log(req.body);
       const newUser = await User.create(req.body);

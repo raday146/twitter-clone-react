@@ -3,8 +3,8 @@ import { Col, Figure, Form, Row } from "react-bootstrap";
 import { withStyles } from "@material-ui/styles";
 import styles from "../styles/RegisterScreenStyle";
 import { Link, useNavigate } from "react-router-dom";
-import { signup } from "../utils/apiClient";
-import { useQuery } from "react-query";
+import { signup, signUp } from "../utils/apiClient";
+import { useQuery, queryCache, useMutation, useQueryClient } from "react-query";
 import FormContainer from "../components/FormContainer";
 import Splash from "../components/Splash";
 import { useAuthUser } from "../context/authContext";
@@ -13,14 +13,20 @@ const RegisterScreen = ({ classes, location }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const auth = useAuthUser();
+  const user = queryClient.getQueryCache().get("AuthProvider");
+  console.log(user);
   const redirect = location?.search ? location.search.split("=")[1] : "/login";
-
+  /*const registerMutation = useMutation(signup, {
+    onSuccess: () => queryClient.invalidateQueries("AuthProvider"),
+  });*/
   useEffect(() => {
-    if (!!!auth) {
-      navigate(redirect);
+    if (!!auth) {
+      navigate("/home");
     }
   }, [auth, navigate, redirect]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -41,7 +47,9 @@ const RegisterScreen = ({ classes, location }) => {
           setError("password field must be filled");
         }
         if (password === ConfirmPassword) {
-          signup(name, email, password);
+          await signUp(name, email, password);
+
+          // registerMutation.mutate(name, email, password);
         } else {
           setError(
             "Password and confirm password are not the same, please try again!"
@@ -57,7 +65,6 @@ const RegisterScreen = ({ classes, location }) => {
   return (
     <Row>
       {loading && <Splash />}
-
       <Col className={`${classes.root} mx-auto border px-3 pb-3`}>
         <Figure className="d-flex flex-column align-items-center">
           <Figure.Image

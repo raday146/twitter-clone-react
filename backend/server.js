@@ -4,7 +4,7 @@ import colors from "colors";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import mongoSanitize from "express-mongo-sanitize";
-import userRouters from "./routers/userRouters.js";
+import userRouter from "./routers/userRouter.js";
 dotenv.config({ path: "./config.env" });
 import connectDB from "./config/db.js";
 
@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === "development") {
 app.use(mongoSanitize());
 app.use(express.json({ limit: "10kb" }));
 
-app.use("/api/users", userRouters);
+app.use("/api/users", userRouter);
 
 app.get("/", (req, res) => {
   res.send("api is running");

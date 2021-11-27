@@ -5,7 +5,7 @@ import UnAuthApp from "./app/UnAuthApp";
 
 function App() {
   const auth = useAuthUser();
-  if (!!auth) {
+  if (!!!auth) {
     return <UnAuthApp />;
   } else {
     return <AuthApp />;
