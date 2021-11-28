@@ -7,7 +7,7 @@ export const authenticate = () => async () => {
   return data;
 };
 
-export const login = async (payload) => {
+export const loginApi = async (email, password) => {
   console.log("befor");
   try {
     const config = {
@@ -15,7 +15,26 @@ export const login = async (payload) => {
         "Content-Type": "application/json",
       },
     };
-    const { email, password } = payload;
+    const { data } = await axios.post(
+      "/api/users/login",
+      { email, password },
+      config
+    );
+    window.localStorage.setItem("AuthProvider", JSON.stringify(data));
+    window.location.pathname = "/home";
+  } catch (error) {
+    return error.message;
+  }
+};
+
+export const login = async (email, password) => {
+  console.log("befor");
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
     const { data } = await axios.post(
       "/api/users/login",
       { email, password },

@@ -1,13 +1,15 @@
-import "./App.css";
 import { useAuthUser } from "./context/authContext";
 import AuthApp from "./app/AuthApp";
 import UnAuthApp from "./app/UnAuthApp";
 
 function App() {
-  const auth = useAuthUser();
-  if (!!!auth) {
+  const { currentUser } = useAuthUser();
+  if (!!!currentUser) {
+    console.log("UnAuthApp");
     return <UnAuthApp />;
   } else {
+    console.log("AuthApp");
+
     return <AuthApp />;
   }
 }

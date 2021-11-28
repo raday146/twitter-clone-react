@@ -43,8 +43,8 @@ const RoutesApp = () => {
             />
             <Route path="/user/:username" element={<UserDetailScreen />} />
             <Route path="/settings/profile" element={<ProfileModalScreen />} />
-            <Route path="/" element={<HomeScreen />} />
             <Route path="/compose/post" element={<CreatePostModalScreen />} />
+            <Route path="/" element={<HomeScreen />} />
           </Routes>
         </Col>
       </Col>

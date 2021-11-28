@@ -20,7 +20,7 @@ export default function Feed() {
 
   React.useEffect(() => {
     if (!!!posts) {
-      const hasFinished = !posts?.pages.some((p) => p.length < 20);
+      const hasFinished = posts?.pages.some((p) => p.length < 20);
       setHasFinished(hasFinished);
     }
   }, [posts]);

@@ -3,8 +3,7 @@ import { Col, Figure, Form, Row } from "react-bootstrap";
 import { withStyles } from "@material-ui/styles";
 import styles from "../styles/RegisterScreenStyle";
 import { Link, useNavigate } from "react-router-dom";
-import { signup, signUp } from "../utils/apiClient";
-import { useQuery, queryCache, useMutation, useQueryClient } from "react-query";
+import { signUp } from "../utils/apiClient";
 import FormContainer from "../components/FormContainer";
 import Splash from "../components/Splash";
 import { useAuthUser } from "../context/authContext";
@@ -13,19 +12,16 @@ const RegisterScreen = ({ classes, location }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const auth = useAuthUser();
-  const user = queryClient.getQueryCache().get("AuthProvider");
-  console.log(user);
+  const { currentUser } = useAuthUser();
   const redirect = location?.search ? location.search.split("=")[1] : "/login";
   /*const registerMutation = useMutation(signup, {
     onSuccess: () => queryClient.invalidateQueries("AuthProvider"),
   });*/
   useEffect(() => {
-    if (!!auth) {
+    if (!!currentUser) {
       navigate("/home");
     }
-  }, [auth, navigate, redirect]);
+  }, [currentUser, navigate, redirect]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

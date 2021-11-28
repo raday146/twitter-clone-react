@@ -15,6 +15,7 @@ export default function Heading(props) {
   return (
     <div className="d-flex justify-content-between border-bottom sticky-top bg-white align-items-center">
       <Row className="d-flex align-items-center">
+        {console.log("home")}
         {backButton && <BackButton />}
         {showButtonProfile && <ButtonProfile />}
         <h5 className="my-3 mx-2 font-weight-bold">{title}</h5>

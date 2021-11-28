@@ -6,15 +6,15 @@ import MediaQuery from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../context/authContext";
 export default function HomeScreen({ location }) {
-  const auth = useAuthUser();
+  const { currentUser } = useAuthUser();
   const redirect = location?.search ? location.search.split("=")[1] : "/login";
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!!!auth) {
+    if (!!!currentUser) {
       navigate(redirect);
     }
-  }, [auth, navigate, redirect]);
+  }, [currentUser, navigate, redirect]);
   return (
     <>
       <Heading title="Home" btnLogout btnProfile />

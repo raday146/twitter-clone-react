@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Col, Figure, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../utils/apiClient";
+import { useAuthUser } from "../context/authContext";
 import { useMutation, useQueryClient } from "react-query";
 import { withStyles } from "@material-ui/styles";
 import styles from "../styles/RegisterScreenStyle";
@@ -10,6 +11,9 @@ import { validate } from "../utils/validate";
 const LoginScreen = ({ classes }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { loginUser } = useAuthUser();
+  const emailRef = useRef();
+  const passwordRef = useRef();
   //const queryClient = useQueryClient();
   //const user = queryClient.getQueryCache().get("AuthProvider");
   //const navigate = useNavigate();
@@ -20,17 +24,19 @@ const LoginScreen = ({ classes }) => {
       e.preventDefault();
       setLoading(true);
       setError(null);
-      const email = e.target.elements.email.value;
-      const password = e.target.elements.password.value;
-      if (!!!email && !!!password) {
+      //const email = e.target.elements.email.value;
+      //const password = e.target.elements.password.value;
+      if (!!!emailRef.current.value && !!!passwordRef.current.value) {
         setError("Fields must be filled");
-      } else if (!!!email) {
+      } else if (!!!emailRef.current.value) {
         setError("Email field must be filled");
-      } else if (!!!password) {
+      } else if (!!!passwordRef.current.value) {
         setError("Password field must be filled");
       } else {
         //loggedin.mutate({ email, password });
-        login({ email, password });
+        //login(emailRef.current.value, passwordRef.current.value);
+        loginUser(emailRef.current.value, passwordRef.current.value);
+
         console.log("loginn");
       }
     } catch (error) {
@@ -58,7 +64,8 @@ const LoginScreen = ({ classes }) => {
             <Form.Label>E-mail</Form.Label>
             <Form.Control
               type="email"
-              name="email"
+              //name="email"
+              ref={emailRef}
               placeholder="Enter email"
               autoCapitalize="off"
             />
@@ -68,7 +75,8 @@ const LoginScreen = ({ classes }) => {
             <Form.Control
               autoCorrect="off"
               type="password"
-              name="password"
+              //name="password"
+              ref={passwordRef}
               placeholder="Enter Password"
             />
           </Form.Group>
