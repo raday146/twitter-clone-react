@@ -18,25 +18,22 @@ export default function QuotedPost({ post, className, expanded = false }) {
         <Row className="d-flex align-items-center">
           <UserLink
             className="rounded-circle d-block"
-            to={`/user/${post.user.screen_name}`}
+            to={`/user/${post.user.name}`}
           >
             <Figure
               className="bg-border-color rounded-circle overflow-hidden mr-1 mb-0"
               style={{ height: "25px", width: "25px" }}
             >
-              <Figure.Image
-                src={post.user.profile_image_url_https}
-                className="w-100 h-100"
-              />
+              <Figure.Image src={post.user.image} className="w-100 h-100" />
             </Figure>
           </UserLink>
           <UserLink
-            to={`/user/${post.user.screen_name}`}
+            to={`/user/${post.user.name}`}
             className="text-dark font-weight-bold mr-1"
           >
             {post.user.name}
           </UserLink>
-          <span className="text-muted">@{post.user.screen_name}</span>
+          <span className="text-muted">@{post.user.name}</span>
           <pre className="m-0 text-muted">{" - "}</pre>
           <span className="text-muted">{formatCreatedAt(post.created_at)}</span>
         </Row>

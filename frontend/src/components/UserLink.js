@@ -1,12 +1,12 @@
 import FollowButton from "./FollowButton";
-import React from "react";
+import React, { forwardRef, useState } from "react";
 import { Card, Figure, OverlayTrigger, Popover, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { formatDate } from "../utils/date";
 import { truncateText } from "../utils/truncate";
 
-export default function UserLink({ user, ...props }) {
-  const [show, setShow] = React.useState(undefined);
+const UserLink = ({ user, ...props }) => {
+  const [show, setShow] = useState(undefined);
 
   return (
     <OverlayTrigger
@@ -18,9 +18,9 @@ export default function UserLink({ user, ...props }) {
       <Link {...props} />
     </OverlayTrigger>
   );
-}
+};
 
-const UserPopover = React.forwardRef(({ user, setShow, ...props }, ref) => {
+const UserPopover = forwardRef(({ user, setShow, ...props }, ref) => {
   return (
     <Popover className="border-0" ref={ref} id="user-popover" {...props}>
       <Card
@@ -33,16 +33,13 @@ const UserPopover = React.forwardRef(({ user, setShow, ...props }, ref) => {
             style={{ height: "65px", width: "65px" }}
             className="rounded-circle overflow-hidden bg-primary mr-3"
           >
-            <Figure.Image
-              className="w-100 h-100"
-              src={user.profile_image_url_https}
-            />
+            <Figure.Image className="w-100 h-100" src={user.image} />
           </Figure>
           <FollowButton user={user} />
         </Row>
         <div className="flex flex-column">
           <b>{user.name}</b>
-          <div className="text-muted mb-2 mt-0">{user.screen_name}</div>
+          <div className="text-muted mb-2 mt-0">{user.name}</div>
         </div>
         <blockquote>{truncateText(user.description, 10)}</blockquote>
         <Row className="d-flex flex-column">
@@ -63,3 +60,4 @@ const UserPopover = React.forwardRef(({ user, setShow, ...props }, ref) => {
     </Popover>
   );
 });
+export default UserLink;

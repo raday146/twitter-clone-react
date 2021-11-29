@@ -11,7 +11,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
 export const headerList = [
   {
     name: "Home",
-    href: "/home",
+    href: "/",
     icon: faHome,
   },
   {

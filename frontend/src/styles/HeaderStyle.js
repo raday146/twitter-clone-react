@@ -1,10 +1,11 @@
 import { sizes } from "../constants/sizes";
 const styles = {
   root: {
-    alignItems: "flex-end !important",
-    flexDirection: "column !important",
+    //alignItems: "flex-end !important",
+    //flexDirection: "column !important",
     height: "100vh !important",
-    display: "flex !important",
+    display: "block !important",
+    margin: "10px",
     "& svg": {
       height: 35,
       padding: 2,
@@ -22,7 +23,7 @@ const styles = {
     textDecoration: "none",
     alignItems: "center",
     paddingRight: "4rem !important",
-    [sizes.down("xl")]: {
+    [sizes.down("lg")]: {
       paddingRight: ".5rem !important",
       // paddingLeft: "3rem !important",
       //flexDirection: "column !important",

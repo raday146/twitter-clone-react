@@ -1,11 +1,11 @@
+import React from "react";
 import Heading from "../components/Heading";
 import UsersList from "../components/UsersList";
-import React from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getPostLikes } from "../utils/apiClient";
 
-export default function PostLikesScreen() {
+const PostLikesScreen = () => {
   const { postId } = useParams();
   const {
     data: users,
@@ -24,4 +24,5 @@ export default function PostLikesScreen() {
       />
     </>
   );
-}
+};
+export default PostLikesScreen;

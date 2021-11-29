@@ -3,7 +3,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { getUserSuggestions } from "../utils/apiClient";
 
-export default function UserSuggestions(props) {
+const UserSuggestions = (props) => {
   const { authUser, ...rest } = props;
   const { data, isLoading, isSuccess } = useQuery(
     "UserSuggestions",
@@ -11,11 +11,13 @@ export default function UserSuggestions(props) {
   );
 
   const users = data?.filter(
-    (user) => user.screen_name !== authUser?.screen_name && !user.following
+    (user) => user.name !== authUser?.name && !user.following
   );
 
   if (!users?.length) {
-    return <div className="message">No user suggestions for you</div>;
+    return (
+      <div className="text-primary message">No user suggestions for you</div>
+    );
   }
 
   return (
@@ -26,4 +28,5 @@ export default function UserSuggestions(props) {
       users={users}
     />
   );
-}
+};
+export default UserSuggestions;

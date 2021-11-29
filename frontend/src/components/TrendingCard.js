@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import Trends from "./Trends";
 
-export default function TrendingCard({ className, title }) {
+const TrendingCard = ({ className, title }) => {
   return (
     <Card className={className}>
       <Card.Header>{title}</Card.Header>
@@ -15,4 +15,5 @@ export default function TrendingCard({ className, title }) {
       </Card.Footer>
     </Card>
   );
-}
+};
+export default TrendingCard;

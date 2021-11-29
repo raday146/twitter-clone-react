@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { getTrends } from "../utils/apiClient";
 import Spinner from "./Spinner";
 
-export default function Trends({ length }) {
+const Trends = ({ length }) => {
   const { data: trends, isLoading, isSuccess } = useQuery("Trends", getTrends);
 
   if (isLoading) return <Spinner />;
@@ -34,4 +34,5 @@ export default function Trends({ length }) {
         : null}
     </ListGroup>
   );
-}
+};
+export default Trends;

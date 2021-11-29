@@ -1,29 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { faImage } from "@fortawesome/free-regular-svg-icons/faImage";
 import { faSmile } from "@fortawesome/free-regular-svg-icons/faSmile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import QuotedPost from "../components/QuotedPost";
 import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
-import { Alert, Modal, OverlayTrigger, Popover } from "react-bootstrap";
+import { Alert, Modal, OverlayTrigger, Popover, Button } from "react-bootstrap";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../context/authContext";
 import { createPost, getPostById } from "../utils/apiClient";
 import { isTextValid, validate } from "../utils/validate";
-export default function CreatePostModalScreen({ location }) {
+
+const CreatePostModalScreen = ({ location }) => {
   const history = useNavigate();
   const quoteId = new URLSearchParams(history.location.search).get("quote");
   const replyId = new URLSearchParams(history.location.search).get("reply_to");
-  const auth = useAuthUser();
+  const { currentUser } = useAuthUser();
   const redirect = location?.search ? location.search.split("=")[1] : "/login";
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!!!auth) {
+    if (!!!currentUser) {
       navigate(redirect);
     }
-  }, [auth, navigate, redirect]);
+  }, [currentUser, navigate, redirect]);
   const { data: quotePost } = useQuery(
     "QuotePost",
     () => getPostById(quoteId),
@@ -38,22 +39,18 @@ export default function CreatePostModalScreen({ location }) {
       enabled: Boolean(replyId),
     }
   );
-
-  const authUser = useAuthUser();
-  const [text, setText] = React.useState("");
-  const [disabled, setDisabled] = React.useState("");
-  const [error, setError] = React.useState(null);
+  const textRef = useRef();
+  const [disabled, setDisabled] = useState(false);
+  const [error, setError] = useState(null);
 
   function handleChange(event) {
-    const text = event.target.value;
-    setText(text);
-    setDisabled(!isTextValid(text));
+    setDisabled(!isTextValid(textRef.current.value));
   }
 
   async function handleSubmit() {
     try {
       if (disabled) return;
-      const content = validate(text.trim(), "html", {
+      const content = validate(textRef.current.value.trim(), "html", {
         max_length: 280,
         identifier: "Post",
       });
@@ -73,7 +70,7 @@ export default function CreatePostModalScreen({ location }) {
       }
       await createPost(post, url);
       setDisabled(false);
-      setText("");
+      textRef.current.value = "";
       handleCloseModal();
     } catch (error) {
       setError(error.message);
@@ -85,7 +82,7 @@ export default function CreatePostModalScreen({ location }) {
   }
 
   function addEmoji(emoji) {
-    setText((text) => text + emoji.native);
+    textRef.current.value = textRef.current.value + emoji.native;
   }
 
   const picker = (
@@ -127,8 +124,8 @@ export default function CreatePostModalScreen({ location }) {
         <div className="media h-100 w-100">
           <img
             className="rounded-circle"
-            src={authUser?.profile_image_url_https}
-            alt={authUser?.screen_name}
+            src={currentUser?.image}
+            alt={currentUser?.name}
             width={50}
             height={50}
           />
@@ -138,7 +135,7 @@ export default function CreatePostModalScreen({ location }) {
               style={{ height: "auto" }}
               name="text"
               onChange={handleChange}
-              value={text}
+              ref={textRef}
               placeholder="What's happening?"
             ></textarea>
             <QuotedPost post={replyPost || quotePost} className="mb-2 mt-n5" />
@@ -158,21 +155,22 @@ export default function CreatePostModalScreen({ location }) {
                 <FontAwesomeIcon size="lg" icon={faSmile} />
               </button>
             </OverlayTrigger>
-            <button className="disabled text-primary btn btn-lg rounded-circle btn-naked-primary p-2">
+            <button className="disabled text-primary btn btn-lg rounded-circle btn-naked-primary ">
               <FontAwesomeIcon size="lg" icon={faImage} />
             </button>
           </div>
           <div className="right">
-            <button
+            <Button
               onClick={handleSubmit}
               disabled={disabled}
-              className="btn btn-primary rounded-pill px-3 py-2 font-weight-bold"
+              className="btn btn-primary disabled rounded-pill px-3 py-2 font-weight-bold "
             >
               Post
-            </button>
+            </Button>
           </div>
         </div>
       </Modal.Footer>
     </Modal>
   );
-}
+};
+export default CreatePostModalScreen;

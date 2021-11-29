@@ -1,7 +1,7 @@
 import React, { useContext, createContext, useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { authenticate } from "../utils/apiClient";
-import { loginApi } from "../utils/apiClient";
+import { loginApi, logout } from "../utils/apiClient";
 
 import Splash from "../components/Splash";
 const AuthContext = createContext(null);
@@ -20,6 +20,17 @@ export function AuthProvider({ children }) {
       return e.message;
     }
   };
+  const userLogout = async () => {
+    try {
+      window.localStorage.removeItem("AuthProvider");
+      logout();
+      console.log("logout");
+      setCurrentUser(null);
+    } catch (error) {
+      return error.message;
+    }
+  };
+
   useEffect(() => {
     const data = window.localStorage.getItem("AuthProvider")
       ? JSON.parse(window.localStorage.getItem("AuthProvider"))
@@ -31,14 +42,10 @@ export function AuthProvider({ children }) {
     }
   }, [currentUser]);
 
-  //const { data, loadding } = useQuery("AuthProvider", authenticate);
-
-  /* if (loadding) {
-    return <Splash />;
-  }*/
   const value = {
     currentUser,
     loginUser,
+    userLogout,
   };
   return (
     <AuthContext.Provider value={value}>

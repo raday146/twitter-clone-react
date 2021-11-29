@@ -4,7 +4,7 @@ import React from "react";
 import { Form, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-function SearchBar() {
+const SearchBar = () => {
   const history = useNavigate();
 
   function handleSubmit(event) {
@@ -35,5 +35,5 @@ function SearchBar() {
       </Form.Group>
     </Form>
   );
-}
+};
 export default SearchBar;

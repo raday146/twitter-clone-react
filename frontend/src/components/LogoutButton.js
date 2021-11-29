@@ -1,13 +1,15 @@
 import React from "react";
-import { logout } from "../utils/apiClient";
+import { useAuthUser } from "../context/authContext";
 
-export default function LogoutButton() {
+const LogoutButton = () => {
+  const { userLogout } = useAuthUser();
   return (
     <button
-      onClick={logout}
+      onClick={userLogout}
       className="btn btn-outline-primary rounded-pill px-2 py-1 mr-2 font-weight-bold"
     >
       Logout
     </button>
   );
-}
+};
+export default LogoutButton;

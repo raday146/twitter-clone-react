@@ -1,12 +1,13 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge } from "react-bootstrap";
 import { useQuery } from "react-query";
 import { Link, NavLink } from "react-router-dom";
 import { useAuthUser } from "../context/authContext";
 import { getNotifications } from "../utils/apiClient";
 import { bottomList } from "../utils/OptionsList";
-export default function BottomNav() {
+
+const BottomNav = () => {
   const authUser = useAuthUser();
   const { data: notifications } = useQuery("Notifications", getNotifications);
 
@@ -67,4 +68,5 @@ export default function BottomNav() {
       })}
     </div>
   );
-}
+};
+export default BottomNav;

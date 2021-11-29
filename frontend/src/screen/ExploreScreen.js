@@ -1,14 +1,14 @@
 import React from "react";
 import { Figure } from "react-bootstrap";
 import MediaQuery from "react-responsive";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, NavLink } from "react-router-dom";
 import FollowCard from "../components/FollowCard";
 import Heading from "../components/Heading";
 import SearchBar from "../components/SearchBar";
 import Trends from "../components/Trends";
 import UserSuggestions from "../components/UserSuggestions";
 
-export default function ExploreScreen({ noSearchBar }) {
+const ExploreScreen = ({ noSearchBar }) => {
   return (
     <>
       <div className="header">
@@ -19,10 +19,10 @@ export default function ExploreScreen({ noSearchBar }) {
         )}
       </div>
       <Routes>
-        <Route path="/explore/users">
+        <NavLink path="/explore/users">
           <Heading title="Users" />
           <UserSuggestions length={10} noPop />
-        </Route>
+        </NavLink>
         <Route path="/">
           <MediaQuery maxWidth={992}>
             <FollowCard
@@ -40,4 +40,13 @@ export default function ExploreScreen({ noSearchBar }) {
       </Routes>
     </>
   );
-}
+};
+export default ExploreScreen;
+/**
+ * 
+ * first routes
+ *  <Route path="/explore/users">
+          <Heading title="Users" />
+          <UserSuggestions length={10} noPop />
+        </Route>
+ */

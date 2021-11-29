@@ -5,11 +5,11 @@ import { useLocation } from "react-router-dom";
 import FollowCard from "./FollowCard";
 import TrendingCard from "./TrendingCard";
 
-export default function Sidebar() {
+const Sidebar = () => {
   const location = useLocation();
 
   return (
-    <Col>
+    <Col className="m-3">
       <SearchBar className="sticky-top my-2" />
       {location.pathname !== "/explore/users" && (
         <FollowCard compact className="my-3" length={5} title="Who to follow" />
@@ -19,4 +19,5 @@ export default function Sidebar() {
       )}
     </Col>
   );
-}
+};
+export default Sidebar;

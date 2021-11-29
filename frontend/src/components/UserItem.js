@@ -5,22 +5,22 @@ import { Col, ListGroup, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { truncateText } from "../utils/truncate";
 
-export default function UserItem({ user, noPop, compact }) {
+const UserItem = ({ user, noPop, compact }) => {
   return (
     <ListGroup.Item
       className="px-1 text-truncate"
       action
       user={user}
       as={noPop ? Link : UserLink}
-      to={`/user/${user.screen_name}`}
+      to={`/user/${user.name}`}
     >
       <div className="Media">
         <img
           width={50}
           height={50}
           className="rounded-circle mx-1"
-          src={user.profile_image_url_https}
-          alt={user.screen_name}
+          src={user.image}
+          alt={user.name}
         />
         <div className="Media-Body">
           <Row>
@@ -28,10 +28,7 @@ export default function UserItem({ user, noPop, compact }) {
               <p className="text-dark mb-0 text-truncate text-capitalize font-weight-bold">
                 {user.name}
               </p>
-              <p className="text-muted text-truncate mt-n1">
-                {" "}
-                @{user.screen_name}
-              </p>
+              <p className="text-muted text-truncate mt-n1"> @{user.name}</p>
             </Col>
             <Col
               className="d-flex align-items-center justify-content-end px-1"
@@ -51,4 +48,5 @@ export default function UserItem({ user, noPop, compact }) {
       </div>
     </ListGroup.Item>
   );
-}
+};
+export default UserItem;

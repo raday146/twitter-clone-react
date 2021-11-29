@@ -22,9 +22,9 @@ const RoutesApp = () => {
   return (
     <Row>
       <Col className="px-sm-4" sm="12" lg="8">
-        <Col className="border">
+        <Col className="border m-3 br-1">
           <Routes>
-            <Route path="/explore" element={<ExploreScreen />} />
+            <Route path="/explore*" element={<ExploreScreen />} />
             <Route path="/search" element={<SearchResultsScreen />} />
             <Route path="/notifications" element={<NotificationsScreen />} />
             <Route path="/post/:postId/likes" element={<PostLikesScreen />} />
@@ -42,7 +42,12 @@ const RoutesApp = () => {
               element={<UserFollowersScreen />}
             />
             <Route path="/user/:username" element={<UserDetailScreen />} />
-            <Route path="/settings/profile" element={<ProfileModalScreen />} />
+            <Route path="/settings/profile" element={<ProfileModalScreen />}>
+              <Route
+                path="/settings/profile?redirected"
+                element={<ProfileModalScreen />}
+              />
+            </Route>
             <Route path="/compose/post" element={<CreatePostModalScreen />} />
             <Route path="/" element={<HomeScreen />} />
           </Routes>

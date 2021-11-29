@@ -21,12 +21,12 @@ export const loginApi = async (email, password) => {
       config
     );
     window.localStorage.setItem("AuthProvider", JSON.stringify(data));
-    window.location.pathname = "/home";
+    window.location.pathname = "/";
   } catch (error) {
     return error.message;
   }
 };
-
+/*
 export const login = async (email, password) => {
   console.log("befor");
   try {
@@ -45,7 +45,7 @@ export const login = async (email, password) => {
   } catch (error) {
     return error.message;
   }
-};
+};*/
 
 export const signUp = async (name, email, password) => {
   try {
@@ -62,7 +62,7 @@ export const signUp = async (name, email, password) => {
       config
     );
     window.location.pathname = "/login";
-    //    window.location.assign("/settings/profile?redirected=true");
+    window.location.assign("/settings/profile?redirected");
 
     console.log("dd");
   } catch (error) {
@@ -72,8 +72,11 @@ export const signUp = async (name, email, password) => {
 
 export const logout = () => async () => {
   await axios.get("api/users/logout");
-  window.location.pathname = "/";
+  window.location.pathname = "/login";
 };
+
+export const updateUserDetails = async (userDetail) => {};
+
 export const getNotifications = () => async () => {};
 export const readNotifactions = async () => {};
 export const getPosts = async () => {};
@@ -91,7 +94,6 @@ export const getSearchResults = async () => {};
 export const getUserFollowers = async () => {};
 export const getUserTimeline = async () => {};
 export const readNotification = async () => {};
-export const updateUserDetails = async () => {};
 export const likePost = async () => {};
 export const repostPost = async () => {};
 export const unlikePost = async () => {};

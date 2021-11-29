@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function BackButton() {
+const BackButton = () => {
   const history = useNavigate();
 
   return (
@@ -14,4 +14,5 @@ export default function BackButton() {
       <FontAwesomeIcon icon={faArrowLeft} size="lg" />
     </button>
   );
-}
+};
+export default BackButton;

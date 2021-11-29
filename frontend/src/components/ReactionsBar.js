@@ -14,7 +14,7 @@ import {
   unrepostPost,
 } from "../utils/apiClient";
 
-export default function ReactionsBar({ post }) {
+const ReactionsBar = ({ post }) => {
   function handleToggleLike() {
     post.favorited ? unlikePost(post) : likePost(post);
   }
@@ -77,4 +77,5 @@ export default function ReactionsBar({ post }) {
       </button>
     </div>
   );
-}
+};
+export default ReactionsBar;

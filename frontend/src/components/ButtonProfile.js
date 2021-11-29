@@ -3,7 +3,7 @@ import { Figure } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useAuthUser } from "../context/authContext";
 
-export default function ButtonProfile() {
+const ButtonProfile = () => {
   const authUser = useAuthUser();
 
   if (!authUser) {
@@ -26,4 +26,5 @@ export default function ButtonProfile() {
       </Figure>
     </Link>
   );
-}
+};
+export default ButtonProfile;

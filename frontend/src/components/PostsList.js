@@ -2,15 +2,19 @@ import React from "react";
 import { ListGroup } from "react-bootstrap";
 import PostItem from "./PostItem";
 import Spinner from "./Spinner";
+import { withStyles } from "@material-ui/styles";
+import styles from "../styles/PostsListStyle";
 
-export default function PostsList(props) {
-  const { posts, isLoading, isSuccess, no_reply_tag } = props;
+const PostsList = (props) => {
+  const { classes, posts, isLoading, isSuccess, no_reply_tag } = props;
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <ListGroup variant="flush" className="border-bottom">
-      {isSuccess ? (
+      {(isSuccess &&
         posts.map(
           (post) =>
             post && (
@@ -20,10 +24,10 @@ export default function PostsList(props) {
                 no_reply_tag={no_reply_tag}
               />
             )
-        )
-      ) : (
-        <div className="message">No posts for you right now</div>
+        )) || (
+        <div className=" text-primary message ">No posts for you right now</div>
       )}
     </ListGroup>
   );
-}
+};
+export default withStyles(styles)(PostsList);

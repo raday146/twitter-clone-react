@@ -1,29 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert, Figure, Form, Modal, Row } from "react-bootstrap";
 import { useAuthUser } from "../context/authContext";
 import { validate } from "../utils/validate";
 import { updateUserDetails } from "../utils/apiClient";
 import { uploadMedia } from "../utils/upload";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-export default function ProfileModalScreen() {
+const ProfileModalScreen = () => {
+  const locationParam = useLocation();
   const history = useNavigate();
-  const authUser = useAuthUser();
-  const [isLoading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-  const [banner, setBanner] = React.useState(authUser?.profile_banner);
-  const [name, setName] = React.useState(authUser?.name);
-  const [bio, setBio] = React.useState(authUser?.description);
-  const [location, setLocation] = React.useState(authUser?.location);
-  const url = authUser?.entities.url.urls[0]?.url;
-  const [website, setWebsite] = React.useState(url);
-  const [profile, setProfile] = React.useState(
-    authUser?.profile_image_url_https
-  );
-  const redirected = new URLSearchParams(history.location.search).get(
+  const { currentUser } = useAuthUser();
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModel] = useState(true);
+  const [banner, setBanner] = useState(currentUser?.profileBanner);
+  const [name, setName] = useState(currentUser?.name);
+  const [bio, setBio] = useState(currentUser?.description);
+  const [location, setLocation] = useState(currentUser?.location);
+  const url = !!currentUser?.urls ? currentUser.urls[0]?.url : "";
+  const [website, setWebsite] = useState(url);
+  const [userImage, setUserImage] = useState(currentUser?.image);
+  const redirected = new URLSearchParams(locationParam.search).get(
     "redirected"
   );
 
+  const handleClose = () => {
+    setShowModel(false);
+    history("/");
+  };
   async function handleSubmit(event) {
     try {
       event.preventDefault();
@@ -48,22 +52,14 @@ export default function ProfileModalScreen() {
         profile_banner: banner,
         location: _location,
         website: _website,
-        profile_image_url_https: profile,
+        profile_image_url_https: userImage,
       };
       await updateUserDetails(user);
-      handleCloseModal();
+      handleClose();
     } catch (error) {
       setError(error.message);
     } finally {
       setLoading(false);
-    }
-  }
-
-  function handleCloseModal() {
-    if (redirected === "true") {
-      history.push("/home");
-    } else {
-      history.goBack();
     }
   }
 
@@ -76,7 +72,7 @@ export default function ProfileModalScreen() {
         file,
         preset: "your-preset",
       });
-      setProfile(avatar);
+      setUserImage(avatar);
     }
   }
 
@@ -99,16 +95,22 @@ export default function ProfileModalScreen() {
       className="p-0"
       size="lg"
       scrollable
-      show
+      show={showModal}
       backdrop="static"
       keyboard={false}
     >
-      <Modal.Header closeButton className="py-2">
+      <Modal.Header className="py-2">
         <Modal.Title>
           <small className="font-weight-bold">
             {!redirected ? "Edit profile" : "Complete your profile"}
           </small>
         </Modal.Title>
+        <button
+          type="button"
+          onClick={handleClose}
+          class="btn-close"
+          aria-label="Close"
+        ></button>
       </Modal.Header>
       {error && (
         <Alert variant="danger" className="mb-0 font-weight-bold text-white">
@@ -126,9 +128,9 @@ export default function ProfileModalScreen() {
                 backgroundImage: `url(${banner})`,
               }}
             >
-              {authUser?.profile_banner_url && (
+              {currentUser?.profileBanner && (
                 <Figure.Image
-                  src={authUser?.profile_banner_url}
+                  src={currentUser?.profileBanner}
                   className="w-100 h-100"
                 />
               )}
@@ -153,7 +155,7 @@ export default function ProfileModalScreen() {
                     style={{ height: "100px", width: "100px" }}
                     className="mt-n5 rounded-circle overflow-hidden bg-primary"
                   >
-                    <Figure.Image className="w-100 h-100" src={profile} />
+                    <Figure.Image className="w-100 h-100" src={userImage} />
                   </Figure>
                   <input
                     style={{ display: "none" }}
@@ -220,4 +222,5 @@ export default function ProfileModalScreen() {
       </Modal.Body>
     </Modal>
   );
-}
+};
+export default ProfileModalScreen;

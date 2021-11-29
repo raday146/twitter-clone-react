@@ -52,6 +52,10 @@ const userSchema = mongoose.Schema(
       required: true,
       default: "Unknown",
     },
+    profileBanner: {
+      type: String,
+      default: "Unknown",
+    },
     defaultImage: {
       type: Boolean,
       required: true,
@@ -74,6 +78,11 @@ const userSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
+    urls: [
+      {
+        type: String,
+      },
+    ],
     createdAt: Date,
     passwordChangedAt: Date,
     passwordResetToken: String,

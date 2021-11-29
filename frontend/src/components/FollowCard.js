@@ -5,16 +5,18 @@ import { useAuthUser } from "../context/authContext";
 import UserSuggestions from "./UserSuggestions";
 
 export default function FollowCard(props) {
-  const authUser = useAuthUser();
-  const { className, ...rest } = props;
+  const { currentUser } = useAuthUser();
+  const { className, title, length, ...rest } = props;
 
   return (
     <Card className={className}>
-      <Card.Header>{props.title}</Card.Header>
-      {authUser ? (
-        <UserSuggestions authUser={authUser} length={props.length} {...rest} />
+      <Card.Header>{title}</Card.Header>
+      {currentUser ? (
+        <UserSuggestions authUser={currentUser} length={length} {...rest} />
       ) : (
-        <div className="message">Login to see users and their posts</div>
+        <div className="text-primary message">
+          Login to see users and their posts
+        </div>
       )}
       <Card.Footer>
         <Card.Link as={Link} to="/explore/users">

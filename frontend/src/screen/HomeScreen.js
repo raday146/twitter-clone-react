@@ -9,7 +9,7 @@ export default function HomeScreen({ location }) {
   const { currentUser } = useAuthUser();
   const redirect = location?.search ? location.search.split("=")[1] : "/login";
   const navigate = useNavigate();
-
+  console.log("what");
   useEffect(() => {
     if (!!!currentUser) {
       navigate(redirect);
@@ -20,12 +20,13 @@ export default function HomeScreen({ location }) {
       <Heading title="Home" btnLogout btnProfile />
       <MediaQuery minWidth={576}>
         <CreatePost />
+
         <div
           style={{ height: "10px" }}
           className="w-100 bg-border-color border"
         />
+        <Feed />
       </MediaQuery>
-      <Feed />
     </>
   );
 }

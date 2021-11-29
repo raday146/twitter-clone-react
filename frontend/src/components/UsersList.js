@@ -3,7 +3,7 @@ import { ListGroup } from "react-bootstrap";
 import Spinner from "./Spinner";
 import UserItem from "./UserItem";
 
-export default function UsersList(props) {
+const UsersList = (props) => {
   const { users, isSuccess, isLoading, length, className, ...rest } = props;
 
   if (isLoading) return <Spinner />;
@@ -19,4 +19,5 @@ export default function UsersList(props) {
       )}
     </ListGroup>
   );
-}
+};
+export default UsersList;

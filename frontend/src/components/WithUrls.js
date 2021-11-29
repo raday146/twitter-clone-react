@@ -3,7 +3,7 @@ import { unescape } from "html-escaper";
 import anchorme from "anchorme";
 import DOMPurify from "dompurify";
 
-export default function WithUrls({ children }) {
+const WithUrls = ({ children }) => {
   if (!children || !children.toString) {
     return null;
   }
@@ -50,4 +50,5 @@ export default function WithUrls({ children }) {
       />
     </>
   );
-}
+};
+export default WithUrls;
