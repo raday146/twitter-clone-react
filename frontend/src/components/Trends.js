@@ -11,7 +11,7 @@ const Trends = ({ length }) => {
   if (isLoading) return <Spinner />;
 
   if (!trends?.length) {
-    return <div className="message">No trends right now</div>;
+    return <div className="text-primary message">No trends right now</div>;
   }
 
   return (

@@ -7,18 +7,18 @@ import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
 import { Alert, Modal, OverlayTrigger, Popover, Button } from "react-bootstrap";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuthUser } from "../context/authContext";
 import { createPost, getPostById } from "../utils/apiClient";
 import { isTextValid, validate } from "../utils/validate";
 
 const CreatePostModalScreen = ({ location }) => {
-  const history = useNavigate();
-  const quoteId = new URLSearchParams(history.location.search).get("quote");
-  const replyId = new URLSearchParams(history.location.search).get("reply_to");
+  const navigate = useNavigate();
+  const locationParam = useLocation();
+  const quoteId = new URLSearchParams(locationParam.search).get("quote");
+  const replyId = new URLSearchParams(locationParam.search).get("reply_to");
   const { currentUser } = useAuthUser();
   const redirect = location?.search ? location.search.split("=")[1] : "/login";
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!!!currentUser) {
@@ -78,7 +78,7 @@ const CreatePostModalScreen = ({ location }) => {
   }
 
   function handleCloseModal() {
-    history.goBack();
+    navigate(-1);
   }
 
   function addEmoji(emoji) {

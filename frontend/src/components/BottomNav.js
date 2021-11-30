@@ -8,10 +8,10 @@ import { getNotifications } from "../utils/apiClient";
 import { bottomList } from "../utils/OptionsList";
 
 const BottomNav = () => {
-  const authUser = useAuthUser();
+  const { currentUser } = useAuthUser();
   const { data: notifications } = useQuery("Notifications", getNotifications);
 
-  const notificationsCount = notifications?.filter((n) => !n.read).length;
+  const notificationsCount = 0; //(notifications && notifications?.filter((n) => !n.read).length) || 0;
 
   return (
     <div className="fixed-bottom bg-white d-flex justify-content-around border">
@@ -54,7 +54,7 @@ const BottomNav = () => {
               key={item.name}
               to={
                 item.name === "Profile"
-                  ? `${item.href}/${authUser?.name}`
+                  ? `${item.href}/${currentUser?.user?.name}`
                   : item.href
               }
               activeClassName="active"

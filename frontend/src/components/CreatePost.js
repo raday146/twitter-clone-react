@@ -13,7 +13,7 @@ const CreatePost = () => {
   const textRef = useRef();
   const [disabled, setDisabled] = useState(true);
 
-  function handleChange(event) {
+  function handleChange(e) {
     setDisabled(!!!isTextValid(textRef.current.value));
   }
 

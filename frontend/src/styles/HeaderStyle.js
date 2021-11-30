@@ -3,9 +3,9 @@ const styles = {
   root: {
     //alignItems: "flex-end !important",
     //flexDirection: "column !important",
-    height: "100vh !important",
+    //height: "100vh !important",
     display: "block !important",
-    margin: "10px",
+    //margin: "10px",
     "& svg": {
       height: 35,
       padding: 2,

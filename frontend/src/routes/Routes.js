@@ -49,7 +49,9 @@ const RoutesApp = () => {
               />
             </Route>
             <Route path="/compose/post" element={<CreatePostModalScreen />} />
-            <Route path="/" element={<HomeScreen />} />
+            <Route path="/" element={<HomeScreen />}>
+              <Route path="/home" element={<HomeScreen />} />
+            </Route>
           </Routes>
         </Col>
       </Col>

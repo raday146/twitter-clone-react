@@ -24,7 +24,6 @@ const UnAuthApp = () => {
             <Routes>
               <Route path="/" element={<LoginScreen />}>
                 <Route path="/signup" element={<RegisterScreen />} />
-
                 <Route path="/login" element={<LoginScreen />} />
               </Route>
             </Routes>
