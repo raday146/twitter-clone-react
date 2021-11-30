@@ -5,24 +5,27 @@ import { validate } from "../utils/validate";
 import { updateUserDetails } from "../utils/apiClient";
 import { uploadMedia } from "../utils/upload";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import {
+  CLAOUDINARY_BANNER,
+  CLAOUDINARY_AVATAR,
+} from "../constants/cloudinary";
 const ProfileModalScreen = () => {
-  const locationParam = useLocation();
+  const location = useLocation();
   const history = useNavigate();
   const { currentUser } = useAuthUser();
+  const [name, setName] = useState(currentUser?.user?.name);
+  const [email, setEmail] = useState(currentUser?.user?.email);
+  const [banner, setBanner] = useState(currentUser?.user?.banner);
+  const [bio, setBio] = useState(currentUser?.user?.bio);
+  const [userLocation, setLocation] = useState(currentUser?.user?.location);
+  const [avatar, setAvatar] = useState(currentUser?.user?.avatar);
+  const url = !!currentUser?.user ? currentUser?.user?.urls[0] : "";
+  const [userUrl, setUrl] = useState(url);
   const [isLoading, setLoading] = useState(false);
+
   const [error, setError] = useState(null);
   const [showModal, setShowModel] = useState(true);
-  const [banner, setBanner] = useState(currentUser?.profileBanner);
-  const [name, setName] = useState(currentUser?.name);
-  const [bio, setBio] = useState(currentUser?.description);
-  const [location, setLocation] = useState(currentUser?.location);
-  const url = !!currentUser?.urls ? currentUser.urls[0]?.url : "";
-  const [website, setWebsite] = useState(url);
-  const [userImage, setUserImage] = useState(currentUser?.image);
-  const redirected = new URLSearchParams(locationParam.search).get(
-    "redirected"
-  );
+  const redirected = new URLSearchParams(location.search).get("redirected");
 
   const handleClose = () => {
     setShowModel(false);
@@ -33,28 +36,32 @@ const ProfileModalScreen = () => {
       event.preventDefault();
       setLoading(true);
       setError(null);
-      const _name = validate(name, "name", { identifier: "Name" });
+      const _name = validate(name, "name", {
+        identifier: "Name",
+      });
       const _bio = validate(bio, "html", {
         identifier: "Bio",
         max_length: 280,
       });
-      const _website = validate(website, "html", {
+      const _website = validate(userUrl, "html", {
         identifier: "Website URL",
         min_length: 0,
       });
-      const _location = validate(location, "name", {
+      const _location = validate(userLocation, "name", {
         identifier: "Location",
         min_length: 0,
       });
       const user = {
         name: _name,
-        description: _bio,
-        profile_banner: banner,
+        email: email,
+        bio: _bio,
+        banner: banner,
         location: _location,
         website: _website,
-        profile_image_url_https: userImage,
+        avatar: avatar,
       };
-      await updateUserDetails(user);
+
+      await updateUserDetails(currentUser.token, user);
       handleClose();
     } catch (error) {
       setError(error.message);
@@ -65,27 +72,25 @@ const ProfileModalScreen = () => {
 
   async function uploadProfileImage(event) {
     const file = event.target.files[0];
-
     if (file) {
-      const avatar = await uploadMedia({
+      const uploadAvatar = await uploadMedia({
         type: "image",
         file,
-        preset: "your-preset",
+        preset: CLAOUDINARY_AVATAR,
       });
-      setUserImage(avatar);
+      setAvatar(uploadAvatar);
     }
   }
 
   async function uploadCoverImage(event) {
     const file = event.target.files[0];
-
     if (file) {
-      const banner = await uploadMedia({
+      const uploadBanner = await uploadMedia({
         type: "image",
         file,
-        preset: "your-preset",
+        preset: CLAOUDINARY_BANNER,
       });
-      setBanner(banner);
+      setBanner(uploadBanner);
     }
   }
 
@@ -121,16 +126,16 @@ const ProfileModalScreen = () => {
         <fieldset>
           <Form onSubmit={handleSubmit} noValidate>
             <Figure
-              className="d-flex"
+              className={`${!currentUser?.banner && "bg-primary"} d-flex`}
               style={{
                 height: "200px",
                 width: "100%",
                 backgroundImage: `url(${banner})`,
               }}
             >
-              {currentUser?.profileBanner && (
+              {currentUser && currentUser?.banner && (
                 <Figure.Image
-                  src={currentUser?.profileBanner}
+                  src={currentUser?.banner}
                   className="w-100 h-100"
                 />
               )}
@@ -155,7 +160,7 @@ const ProfileModalScreen = () => {
                     style={{ height: "100px", width: "100px" }}
                     className="mt-n5 rounded-circle overflow-hidden bg-primary"
                   >
-                    <Figure.Image className="w-100 h-100" src={userImage} />
+                    <Figure.Image className="w-100 h-100" src={avatar} />
                   </Figure>
                   <input
                     style={{ display: "none" }}
@@ -171,26 +176,36 @@ const ProfileModalScreen = () => {
                 <Form.Control
                   style={{ fontSize: "1.25rem" }}
                   type="text"
-                  onChange={(event) => setName(event.target.value)}
                   value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </Form.Group>
+              <Form.Group controlId="email" className="my-2">
+                <Form.Label>E-mail</Form.Label>
+                <Form.Control
+                  style={{ fontSize: "1.25rem" }}
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Form.Group>
+
               <Form.Group controlId="bio">
                 <Form.Label>Bio</Form.Label>
                 <Form.Control
                   as="textarea"
                   style={{ fontSize: "1.25rem", minHeight: "100px" }}
-                  onChange={(event) => setBio(event.target.value)}
                   value={bio}
+                  onChange={(e) => setBio(e.target.value)}
                 />
               </Form.Group>
-              <Form.Group controlId="location">
+              <Form.Group controlId="location" className="my-2">
                 <Form.Label>Location</Form.Label>
                 <Form.Control
                   style={{ fontSize: "1.25rem" }}
                   type="text"
-                  onChange={(event) => setLocation(event.target.value)}
-                  value={location}
+                  value={userLocation}
+                  onChange={(e) => setLocation(e.target.value)}
                 />
               </Form.Group>
               <Form.Group controlId="website">
@@ -198,8 +213,8 @@ const ProfileModalScreen = () => {
                 <Form.Control
                   style={{ fontSize: "1.25rem" }}
                   type="text"
-                  onChange={(event) => setWebsite(event.target.value)}
-                  value={website}
+                  value={userUrl}
+                  onChange={(e) => setUrl(e.target.value)}
                 />
               </Form.Group>
             </div>

@@ -1,4 +1,6 @@
 import axios from "axios";
+import { useAuthUser } from "../context/authContext";
+
 const clientApi = axios.create({
   baseURL: "http://localhost:3000/",
 });
@@ -75,8 +77,37 @@ export const logout = () => async () => {
   window.location.pathname = "/login";
 };
 
-export const updateUserDetails = async (userDetail) => {};
+export const getProfile = async (token) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.get(`/api/users/profile`, config);
+    return data;
+  } catch (error) {
+    return error.message;
+  }
+};
 
+export const updateUserDetails = async (token, user) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.put(`/api/users/profile`, user, config);
+
+    console.log(data);
+    return data.user;
+  } catch (error) {
+    return error.message;
+  }
+};
 export const getNotifications = () => async () => {};
 export const readNotifactions = async () => {};
 export const getPosts = async () => {};

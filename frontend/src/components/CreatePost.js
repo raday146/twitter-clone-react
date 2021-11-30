@@ -14,7 +14,6 @@ const CreatePost = () => {
   const [disabled, setDisabled] = useState(true);
 
   function handleChange(event) {
-    console.log(disabled);
     setDisabled(!!!isTextValid(textRef.current.value));
   }
 
@@ -38,11 +37,14 @@ const CreatePost = () => {
   return (
     <div className="p-2 mt-2 m-3">
       <div className="media">
-        <Link className="rounded-circle" to={`/user/${currentUser?.name}`}>
+        <Link
+          className="rounded-circle"
+          to={`/user/${currentUser?.user?.name}`}
+        >
           <img
             className="rounded-circle"
-            src={currentUser?.image}
-            alt={currentUser?.name}
+            src={currentUser?.user?.avatar}
+            alt={currentUser?.user?.name}
             width={50}
             height={50}
           />

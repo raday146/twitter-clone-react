@@ -47,16 +47,19 @@ const userSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
+    bio: {
+      type: String,
+    },
     avatar: {
       type: String,
       required: true,
       default: "Unknown",
     },
-    profileBanner: {
+    banner: {
       type: String,
       default: "Unknown",
     },
-    defaultImage: {
+    defaultAvatar: {
       type: Boolean,
       required: true,
       default: true,
@@ -71,7 +74,7 @@ const userSchema = mongoose.Schema(
       required: true,
       default: "Unknown",
     },
-    followerSchema: [followerSchema],
+    followers: [followerSchema],
     friends: [friendsSchema],
     favoritesCount: {
       type: Number,

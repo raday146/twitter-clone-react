@@ -3,7 +3,7 @@ import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import User from "./../models/userModel.js";
 import asyncHandler from "express-async-handler";
-
+import { AppError } from "../middleware/errorMiddleware.js";
 const signToken = (id) => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -88,4 +88,55 @@ const logout = asyncHandler(async (req, res) => {
   });
 });
 
-export { signup, login, logout };
+/**
+ *
+ * @description Protect by verfied user
+ *
+ */
+
+const protect = asyncHandler(async (req, res, next) => {
+  let token = req.params.token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  } else if (req.headers.cookie) {
+    token = req.headers.cookie.split("=")[1];
+  }
+
+  if (!token) {
+    return next(
+      new AppError("You are not logged in, please log in to get access.", 401)
+    );
+  }
+
+  let decoded;
+  try {
+    decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  } catch (error) {
+    return res.status(404).json({ error: "Invalid token" });
+    // return next(new AppError("You may have Autorizaiton problem!", 401));
+  }
+  //4)check if user changed password after the token was issued
+  const currentUser = await User.findById(decoded.id);
+
+  if (!currentUser) {
+    return next(
+      new AppError("The token belonging to this user no longer exist!", 401)
+    );
+  }
+
+  if (currentUser.changedPasswordAfter(decoded.iat)) {
+    return next(
+      new AppError("User recently changed password! please log in again.", 401)
+    );
+  }
+
+  req.user = currentUser;
+  console.log("end protect");
+
+  next();
+});
+
+export { signup, login, logout, protect };

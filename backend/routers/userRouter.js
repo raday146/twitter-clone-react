@@ -1,6 +1,12 @@
 import express from "express";
 //import userController from "../controllers/userController.js";
-import { login, signup, logout } from "../controllers/authController.js";
+import {
+  login,
+  signup,
+  logout,
+  protect,
+} from "../controllers/authController.js";
+import { myProfile, updateProfile } from "../controllers/userController.js";
 
 const router = express.Router();
 
@@ -24,13 +30,12 @@ router.post("/signup", signup());
  */
 
 router.post("/login", login()).post("/logout", logout);
-/*
+
 router.use(protect);
-router
-  .route("/profile")
-  .get(myProfile())
-  .put(updateUserProfile())
-  .patch(updatePassword());
+router.route("/profile").get(myProfile()).put(updateProfile());
+
+/*
+.patch(updatePassword());
 
 router.use(restriction);
 router.route("/:id").get(getUserById()).put(updateUser()).delete(deleteUser());
