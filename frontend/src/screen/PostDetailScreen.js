@@ -14,7 +14,7 @@ import Spinner from "../components/Spinner";
 import { getPostById, getReplies } from "../utils/apiClient";
 import { formatDate, formatTime } from "../utils/date";
 
-export default function PostDetailScreen() {
+const PostDetailScreen = () => {
   const { postId } = useParams();
   const { data: post, isLoading } = useQuery("PostDetail", () =>
     getPostById(postId)
@@ -103,4 +103,5 @@ export default function PostDetailScreen() {
       </Col>
     </>
   );
-}
+};
+export default PostDetailScreen;

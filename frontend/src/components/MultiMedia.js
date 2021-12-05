@@ -4,30 +4,25 @@ import { ReactTinyLink } from "react-tiny-link";
 import getUrls from "get-urls";
 
 export default function MultiMedia(props) {
-  const { post, expanded = false, className } = props;
+  const { text, media, expanded = false, className } = props;
 
-  const { entities = {}, text } = post;
-  let {
-    media: [photo] = [],
-    urls: [url],
-  } = entities;
-
-  if (photo) {
-    photo = (
-      <Image fluid rounded src={photo.media_url_https} alt="media preview" />
-    );
+  let photo,
+    url = [];
+  if (media && media?.photo) {
+    photo = <Image fluid rounded src={media?.photo} alt="media preview" />;
   }
 
-  if (!url) {
-    let unparsed_urls = Array.from(getUrls(text));
-    if (unparsed_urls.length) {
+  if (media && media?.url) {
+    let unparsed_urls = !!text ? Array.from(getUrls(text)) : "";
+    console.log(unparsed_urls);
+    if (!!unparsed_urls && unparsed_urls?.length) {
       url = {
         expanded_url: unparsed_urls[0],
       };
     }
   }
 
-  if (url) {
+  if (!!!url) {
     url = (
       <ReactTinyLink
         width="100%"
@@ -36,12 +31,12 @@ export default function MultiMedia(props) {
         showGraphic
         maxLine={2}
         minLine={1}
-        url={url.expanded_url}
+        url={media?.url}
       />
     );
   }
 
-  if (photo || url) {
+  if (!!photo || !!url) {
     return (
       <Card
         className={`${className} w-100 bg-transparent`}

@@ -6,7 +6,11 @@ import {
   logout,
   protect,
 } from "../controllers/authController.js";
-import { myProfile, updateProfile } from "../controllers/userController.js";
+import {
+  myProfile,
+  updateProfile,
+  getUser,
+} from "../controllers/userController.js";
 
 const router = express.Router();
 
@@ -30,7 +34,7 @@ router.post("/signup", signup());
  */
 
 router.post("/login", login()).post("/logout", logout);
-
+router.get("/:id", getUser());
 router.use(protect);
 router.route("/profile").get(myProfile()).put(updateProfile());
 

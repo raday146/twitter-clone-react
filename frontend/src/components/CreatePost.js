@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { faImage } from "@fortawesome/free-regular-svg-icons/faImage";
 import { faSmile } from "@fortawesome/free-regular-svg-icons/faSmile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,15 +19,17 @@ const CreatePost = () => {
 
   async function handleSubmit() {
     try {
-      if (disabled) return;
-      const content = validate(textRef.current.value.trim(), "html", {
+      if (disabled) {
+        return;
+      }
+      const validText = validate(textRef.current.value.trim(), "html", {
         max_length: 280,
         identifier: "Post",
       });
       setDisabled(true);
-      const post = { text: content };
-      await createPost(post);
+      await createPost(currentUser.token, { text: validText });
       setDisabled(false);
+      console.log("done good!");
       textRef.current.value = "";
     } catch (error) {
       alert(error.message);

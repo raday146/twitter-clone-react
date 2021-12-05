@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PostsList from "./PostsList";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import { getPosts } from "../utils/apiClient";
 import FollowCard from "./FollowCard";
 import Spinner from "./Spinner";
@@ -8,26 +8,27 @@ import { Row, Col } from "react-bootstrap";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 const Feed = () => {
+  //const { data, loading } = useQuery("Posts", getPosts);
   const [page, setPage] = useState(2);
   const [hasFinished, setHasFinished] = useState(false);
-
   const {
     data: posts,
     isLoading,
     isSuccess,
     isFetchingNextPage,
+    hasNextPage,
     fetchNextPage,
   } = useInfiniteQuery("Posts", getPosts);
+  //console.log(posts);
 
   useEffect(() => {
-    if (!posts && posts?.pages) {
-      const hasFinished = posts?.pages.some((p) => p.length < 20);
-      setHasFinished(hasFinished);
-    }
-  }, [posts]);
+    setHasFinished(!hasNextPage);
+  }, [hasNextPage, posts]);
 
   useBottomScrollListener(() => {
-    if (hasFinished) return;
+    if (hasFinished) {
+      return;
+    }
     fetchNextPage({ pageParam: page });
     setPage((page) => page + 1);
   }, 200);
@@ -37,7 +38,7 @@ const Feed = () => {
       <Col m-3>
         {(hasFinished && (
           <PostsList
-            posts={posts?.pages.flatMap((page) => page)}
+            posts={posts?.pages.reduce((page) => page)}
             isLoading={isLoading}
             isSuccess={isSuccess}
           />

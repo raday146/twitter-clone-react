@@ -3,18 +3,16 @@ import WithUrls from "./WithUrls";
 import { truncateText } from "../utils/truncate";
 import { useNavigate } from "react-router-dom";
 
-export default function PostText({ post, to, expanded = false }) {
+export default function PostText({ text, to, expanded = false }) {
   const history = useNavigate();
-  let { text } = post;
-
   if (!expanded) {
     text = truncateText(text, 5);
   }
-
+  console.log(text);
   return (
     <div
       {...OnClick((e) => {
-        to && history.push(to);
+        to && history(to);
       })}
     >
       <WithUrls>{text}</WithUrls>

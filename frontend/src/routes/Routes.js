@@ -34,14 +34,14 @@ const RoutesApp = () => {
             />
             <Route path="/post/:postId" element={<PostDetailScreen />} />
             <Route
-              path="/user/:username/friends"
+              path="/user/:userId/friends"
               element={<UserFriendsScreen />}
             />
             <Route
-              path="/user/:username/followers"
+              path="/user/:userId/followers"
               element={<UserFollowersScreen />}
             />
-            <Route path="/user/:username" element={<UserDetailScreen />} />
+            <Route path="/user/:userId" element={<UserDetailScreen />} />
             <Route path="/settings/profile" element={<ProfileModalScreen />}>
               <Route
                 path="/settings/profile?redirected"

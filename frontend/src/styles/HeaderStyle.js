@@ -17,6 +17,9 @@ const styles = {
       lineHeight: 1.5,
     },
   },
+  brand: {
+    boxShadow: "5px 5px 5px rgba(0,0,0,.1)",
+  },
   hedarLinks: {
     fontWeight: "lighter",
     flexDirection: "column !important",
@@ -28,6 +31,9 @@ const styles = {
       // paddingLeft: "3rem !important",
       //flexDirection: "column !important",
     },
+  },
+  postBtn: {
+    margin: "5px",
   },
 };
 export default styles;

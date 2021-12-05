@@ -14,40 +14,42 @@ import Spinner from "../components/Spinner";
 import { useAuthUser } from "../context/authContext";
 import { getUserTimeline } from "../utils/apiClient";
 import { formatDate } from "../utils/date";
+import { useQueryClient } from "react-query";
+import { getUserById } from "../utils/apiClient";
 
 const UserDetailScreen = () => {
-  const { username } = useParams();
-  const { data, isLoading, isSuccess } = useQuery(
-    ["UserDetail", username],
-    () => getUserTimeline(username)
-  );
+  const { userId } = useParams();
+  const queryClient = useQueryClient();
   const { currentUser } = useAuthUser();
+  console.log("id: ", userId);
+  const data = queryClient.getQueryData("User-posts");
+  const {
+    data: user,
+    loading,
+    isSuccess,
+  } = useQuery(["UserDetail", userId], getUserById);
 
-  const user = data?.user;
-  const posts = data?.posts;
-
-  useEffect(() => {
-    if (isLoading) {
-      return <Spinner />;
-    }
-  }, [isLoading]);
+  const posts = data;
 
   if (!user) {
     return <div className="message font-weight-bold">User not found</div>;
   }
 
-  const isAuthUser = currentUser.user.name === user.name;
-  const expanded_url = user.urls[0];
-  const url = user.urls[0];
+  console.log("user: ", user);
+  const isAuthUser = currentUser?.user?.name === user?.name;
+  const expanded_url = user?.urls[0];
+  const url = user?.urls[0];
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <>
       <Heading title={user.name} backButton />
       <Figure
         style={{
           height: "200px",
           width: "100%",
-          backgroundImage: `url(${user.banner})`,
+          backgroundImage: `url(${user?.banner})`,
         }}
       />
       <div className="p-3 border-bottom">
@@ -56,7 +58,7 @@ const UserDetailScreen = () => {
             style={{ height: "100px", width: "100px" }}
             className="mt-n5 rounded-circle overflow-hidden bg-primary"
           >
-            <Figure.Image className="w-100 h-100" src={user.avatar} />
+            <Figure.Image className="w-200 h-100" src={user?.avatar} />
           </Figure>
           {isAuthUser ? (
             <Link
@@ -71,9 +73,9 @@ const UserDetailScreen = () => {
         </Row>
         <div className="flex flex-column">
           <h5 className="mb-0">
-            <b>{user.name}</b>
+            <b>{user?.name}</b>
           </h5>
-          <div className="text-muted">@{user.name}</div>
+          <div className="text-muted">@{user?.name}</div>
         </div>
         <blockquote
           style={{ maxHeight: "300px" }}
@@ -89,7 +91,7 @@ const UserDetailScreen = () => {
                 icon={faLocation}
                 style={{ fontSize: "1em" }}
               />
-              <span className="ml-1">{user.location || "Unknown"}</span>
+              <span className="ml-1">{user?.location || "Unknown"}</span>
             </div>
           </Col>
           <Col sm="6" lg="4" className="px-2 mb-1">
@@ -99,7 +101,7 @@ const UserDetailScreen = () => {
                 icon={faDate}
                 style={{ fontSize: "1em" }}
               />
-              <span className="ml-1">Joined {formatDate(user.createdAt)}</span>
+              <span className="ml-1">Joined {formatDate(user?.createdAt)}</span>
             </div>
           </Col>
           <Col sm="6" lg="4" className="px-2 mb-1">
@@ -114,16 +116,19 @@ const UserDetailScreen = () => {
           </Col>
         </Row>
         <Row className="d-flex my-2">
-          <Link to={`/user/${user.name}/followers`} className="text-muted mr-2">
+          <Link
+            to={`/user/${user?.name}/followers`}
+            className="text-muted mr-2"
+          >
             {user.followersCount} <span>Followers</span>
           </Link>
-          <Link to={`/user/${user.name}/friends`} className="text-muted mr-2">
+          <Link to={`/user/${user?.name}/friends`} className="text-muted mr-2">
             {user.friendsCount} <span>Following</span>
           </Link>
         </Row>
       </div>
       <h5 className="m-2 pb-2 border-bottom">
-        {user.statusesCount} <span className="text-muted">Posts</span>
+        {user?.statusesCount} <span className="text-muted">Posts</span>
       </h5>
       <PostsList posts={posts} isSuccess={isSuccess} />
     </>

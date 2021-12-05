@@ -1,12 +1,15 @@
 @import "custom";
 
 html {
-  font-size: 16px;
+  font-size: 12px;
+
+
 }
 body {
   overflow-y: scroll;
   overflow-x: hidden;
-  background-color:#ffffff
+  background-color:#ffffff;
+
 }
 a {
   color: $primary;

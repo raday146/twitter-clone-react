@@ -6,8 +6,7 @@ import { formatDate } from "../utils/date";
 import { truncateText } from "../utils/truncate";
 
 const UserLink = ({ user, ...props }) => {
-  const [show, setShow] = useState(undefined);
-
+  const [show, setShow] = useState(false);
   return (
     <OverlayTrigger
       show={show}
@@ -33,19 +32,19 @@ const UserPopover = forwardRef(({ user, setShow, ...props }, ref) => {
             style={{ height: "65px", width: "65px" }}
             className="rounded-circle overflow-hidden bg-primary mr-3"
           >
-            <Figure.Image className="w-100 h-100" src={user.image} />
+            <Figure.Image className="w-100 h-100" src={user?.avatar} />
           </Figure>
           <FollowButton user={user} />
         </Row>
         <div className="flex flex-column">
-          <b>{user.name}</b>
-          <div className="text-muted mb-2 mt-0">{user.name}</div>
+          <b>{user?.name}</b>
+          <div className="text-muted mb-2 mt-0">{user?.name}</div>
         </div>
-        <blockquote>{truncateText(user.description, 10)}</blockquote>
+        <blockquote>{truncateText(user?.bio, 10)}</blockquote>
         <Row className="d-flex flex-column">
-          <span className="text-muted">{user.location}</span>
+          <span className="text-muted">{user?.location}</span>
           <span className="text-muted">
-            Joined {formatDate(user.created_at)}
+            Joined {formatDate(user?.createdAt)}
           </span>
         </Row>
         <Row className="d-flex mt-1 mb-2">

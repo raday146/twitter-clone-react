@@ -14,10 +14,6 @@ const LoginScreen = ({ classes }) => {
   const { loginUser } = useAuthUser();
   const emailRef = useRef();
   const passwordRef = useRef();
-  //const queryClient = useQueryClient();
-  //const user = queryClient.getQueryCache().get("AuthProvider");
-  //const navigate = useNavigate();
-  //const loggedin = useMutation(login, {onSuccess: () => queryClient.invalidateQueries("AuthProvider"),});
 
   async function handleSubmit(e) {
     try {

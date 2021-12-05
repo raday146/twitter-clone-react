@@ -85,10 +85,12 @@ export const getProfile = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    const { data } = await axios.get(`/api/users/profile`, config);
+    const { data } = await axios.get("/api/users/profile", config);
     return data;
   } catch (error) {
-    return error.message;
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
   }
 };
 
@@ -100,23 +102,68 @@ export const updateUserDetails = async (token, user) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    const { data } = await axios.put(`/api/users/profile`, user, config);
+    const { data } = await axios.put("/api/users/profile", user, config);
 
     console.log(data);
     return data.user;
   } catch (error) {
-    return error.message;
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
   }
 };
+export const createPost = async (token, post) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios.post("/api/posts", post, config);
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+
+export const getPosts = async () => {
+  try {
+    const { data } = await clientApi.get("/api/posts");
+    return data;
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+
+export const getUserById = async ({ queryKey }) => {
+  try {
+    const id = queryKey[1];
+    console.log(id);
+
+    if (!id) {
+      return "No users";
+    }
+    console.log(id);
+    const { data } = await axios.get(`/api/users/${id}`);
+    return data;
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+
 export const getNotifications = () => async () => {};
 export const readNotifactions = async () => {};
-export const getPosts = async () => {};
 export const getReplies = async () => {};
 export const getUserSuggestions = async () => {};
 export const unfollowUser = async () => {};
 export const followUser = async () => {};
 export const getTrends = async () => {};
-export const createPost = async () => {};
 export const getFriends = async () => {};
 export const getPostById = async () => {};
 export const getPostLikes = async () => {};

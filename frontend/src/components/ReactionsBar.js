@@ -16,11 +16,11 @@ import {
 
 const ReactionsBar = ({ post }) => {
   function handleToggleLike() {
-    post.favorited ? unlikePost(post) : likePost(post);
+    post?.likes ? unlikePost(post) : likePost(post);
   }
 
   function handleToggleRepost() {
-    post.retweeted ? unrepostPost(post) : repostPost(post);
+    post?.tweeted ? unrepostPost(post) : repostPost(post);
   }
 
   return (
@@ -30,12 +30,12 @@ const ReactionsBar = ({ post }) => {
           className="btn btn-naked-primary rounded-pill"
           id="comment-dropdown"
         >
-          {post.retweeted ? (
+          {post?.tweeted ? (
             <FontAwesomeIcon icon={commentSolid} className="text-success" />
           ) : (
             <FontAwesomeIcon icon={faComment} />
           )}
-          <small className="m-1">{post.retweet_count}</small>
+          <small className="m-1">{post.tweetCount}</small>
         </Dropdown.Toggle>
         <Dropdown.Menu alignRight className="higher-index rounded-0">
           <Dropdown.Item
@@ -43,19 +43,19 @@ const ReactionsBar = ({ post }) => {
             className="high-index"
             as="button"
           >
-            {post.retweeted ? "Undo Repost" : "Repost"}
+            {post.tweeted ? "Undo Repost" : "Repost"}
           </Dropdown.Item>
           <Dropdown.Item
             as={Link}
             className="high-index"
-            to={`/compose/post?quote=${post.id_str}`}
+            to={`/compose/post?quote=${post._id}`}
           >
             Quote this post
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <Link
-        to={`/compose/post?reply_to=${post.id_str}`}
+        to={`/compose/post?reply_to=${post._id}`}
         className="btn btn-naked-secondary rounded-pill high-index"
       >
         <FontAwesomeIcon
@@ -68,12 +68,12 @@ const ReactionsBar = ({ post }) => {
         onClick={handleToggleLike}
         className="btn btn-naked-danger rounded-pill high-index"
       >
-        {post.favorited ? (
+        {post?.liskes ? (
           <FontAwesomeIcon icon={heartSolid} className="text-danger" />
         ) : (
           <FontAwesomeIcon icon={faHeart} />
         )}
-        <small className="m-1">{post.favorite_count}</small>
+        <small className="m-1">{post.numLikes}</small>
       </button>
     </div>
   );

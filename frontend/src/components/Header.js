@@ -23,7 +23,7 @@ const Header = ({ classes }) => {
     <Col className={classes.root}>
       <div className="m-2 mr-xl-auto ml-xl-4">
         <Link
-          className="btn text-primary btn-naked-primary rounded-circle p-2"
+          className={`${classes.brand} btn text-primary btn-naked-primary rounded-circle`}
           to="/home"
         >
           <FontAwesomeIcon size="2x" icon={faTwitter} />
@@ -59,7 +59,7 @@ const Header = ({ classes }) => {
                 activeClassName="active"
               >
                 <FontAwesomeIcon className="m-2" size="lg" icon={item.icon} />
-                <span className="d-none d-xl-block mr-2">{item.name}</span>
+                <span className="d-none d-xl-block my-3">{item.name}</span>
               </NavLink>
               {badge}
             </div>
@@ -67,7 +67,7 @@ const Header = ({ classes }) => {
         })}
       </div>
       <Link
-        class="btn btn-primary rounded-pill"
+        class={`${classes.postBtn} btn btn-primary rounded-pill`}
         id="compose"
         to="/compose/post"
       >

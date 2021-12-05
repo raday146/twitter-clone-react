@@ -8,26 +8,39 @@ import React from "react";
 import { Figure, ListGroup, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { formatCreatedAt } from "../utils/date";
+import Spinner from "./Spinner";
+import { useAuthUser } from "../context/authContext";
+import Divider from "@mui/material/Divider";
+import { useQuery } from "react-query";
+import { getUserById } from "../utils/apiClient";
 
-export default function PostItem({ post, no_reply_tag }) {
-  return (
+const PostItem = ({ post, ind, no_reply_tag }) => {
+  const { currentUser } = useAuthUser();
+  const { data: user, loading } = useQuery(
+    ["Post-user", post?.user?._id],
+    getUserById
+  );
+  console.log(post);
+  return loading ? (
+    <Spinner />
+  ) : (
     <ListGroup.Item className="px-3" action as="div">
       <Row className="d-flex px-3 pb-1 mt-n2 text-muted">
         <PostTag post={post} no_reply_tag={no_reply_tag} />
       </Row>
-      <Link className="stretched-link" to={`/post/${post.id_str}`} />
+      <Link className="stretched-link" to={`/post/${post._id}`} />
       <div className="media mb-n2 w-100">
         <UserLink
-          user={post.user}
+          user={user}
           className="rounded-circle"
-          to={`/user/${post.user.screen_name}`}
+          to={`/user/${post?.user}`}
         >
           <Figure
             className="bg-border-color rounded-circle mr-2 overflow-hidden"
             style={{ height: "50px", width: "50px" }}
           >
             <Figure.Image
-              src={post.user.profile_image_url_https}
+              src={currentUser.user.avatar}
               className="w-100 h-100"
             />
           </Figure>
@@ -35,35 +48,42 @@ export default function PostItem({ post, no_reply_tag }) {
         <div className="media-body w-50">
           <Row className="d-flex align-items-center">
             <UserLink
-              user={post.user}
-              to={`/user/${post.user.screen_name}`}
+              user={user}
+              to={`/user/${post?.user}`}
               className="text-dark font-weight-bold mr-1"
             >
-              {post.user.name}
+              {currentUser.user.name}
             </UserLink>
-            <span className="text-muted mr-1">@{post.user.screen_name}</span>
+            <span className="text-muted mr-1">@{currentUser?.user.name}</span>
             <pre className="m-0 text-muted">{" - "}</pre>
-            <span className="text-muted">
-              {formatCreatedAt(post.created_at)}
+            <span className="text-muted my-2">
+              {post && formatCreatedAt(post.createdAt)}
             </span>
           </Row>
-          <Row className="mb-n1 mt-1">
+          <Row className=" my-2 mb-n1 mt-1">
             <blockquote className="mb-1 mw-100">
-              <PostText post={post} to={`/post/${post.id_str}`} />
+              <PostText text={post.text} to={`/post/${post._id}`} />
             </blockquote>
           </Row>
-          <Row>
-            <MultiMedia post={post} className="mt-2" />
+          <Row className="my-3">
+            {(!!!post?.media && (
+              <MultiMedia
+                text={post.text}
+                media={post?.media}
+                className="mt-2"
+              />
+            )) || <Divider />}
             <QuotedPost
-              post={!no_reply_tag && post.quoted_status}
+              post={!no_reply_tag && post.isQouted}
               className="mt-2"
             />
           </Row>
-          <Row className="d-flex justify-content-end align-items-center position-static">
+          <Row className="d-flex justify-content-end align-items-center position-static my-2">
             <ReactionsBar post={post} />
           </Row>
         </div>
       </div>
     </ListGroup.Item>
   );
-}
+};
+export default PostItem;
