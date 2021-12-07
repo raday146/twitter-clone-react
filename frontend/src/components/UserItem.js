@@ -12,23 +12,23 @@ const UserItem = ({ user, noPop, compact }) => {
       action
       user={user}
       as={noPop ? Link : UserLink}
-      to={`/user/${user.name}`}
+      to={`/user/${user?._id}`}
     >
       <div className="Media">
         <img
           width={50}
           height={50}
           className="rounded-circle mx-1"
-          src={user.image}
-          alt={user.name}
+          src={user?.avatar}
+          alt={user?.name}
         />
         <div className="Media-Body">
           <Row>
             <Col className="pr-5 pr-lg-4 pr-xl-2" xs="8">
               <p className="text-dark mb-0 text-truncate text-capitalize font-weight-bold">
-                {user.name}
+                {user?.name}
               </p>
-              <p className="text-muted text-truncate mt-n1"> @{user.name}</p>
+              <p className="text-muted text-truncate mt-n1"> @{user?.name}</p>
             </Col>
             <Col
               className="d-flex align-items-center justify-content-end px-1"
@@ -40,7 +40,7 @@ const UserItem = ({ user, noPop, compact }) => {
           <Row>
             {!compact && (
               <blockquote className="mb-0 mt-n2">
-                {truncateText(user.description, 7)}
+                {truncateText(user.bio, 7)}
               </blockquote>
             )}
           </Row>

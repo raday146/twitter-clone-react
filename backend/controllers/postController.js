@@ -46,9 +46,76 @@ const createPost = () =>
           "An issue ware accure in creating the post, please try in another time.",
         stack: error.message,
       });
+      bv;
     }
   });
 const editPost = () => asyncHandler(async (req, res, next) => {});
 const deletePostById = () => asyncHandler(async (req, res, next) => {});
+const setLikes = () =>
+  asyncHandler(async (req, res, next) => {
+    try {
+      //const { like } = req.body;
+      const post = await Post.findById(req.params.id);
 
-export { getAllPosts, getPostById, createPost, editPost, deletePostById };
+      const alreadyliked = post.likes.find(
+        (l) => l.user.toString() === req.user._id.toString()
+      );
+      if (alreadyliked) {
+        post.likes
+          .find((l) => l.user.toString() === req.user._id.toString())
+          .remove();
+        post.numLikes = post.likes.length;
+        await post.save();
+        res.status(200).json({
+          message: "You remove like",
+        });
+      } else {
+        const like = {
+          islike: true,
+          user: req.user._id,
+        };
+        post.likes.push(like);
+        post.numLikes = post.likes.length;
+        await post.save();
+        res.status(201).json({
+          message: "like added",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        message: "No post found",
+        stack: error,
+      });
+    }
+  });
+const getPostLikesByUser = () =>
+  asyncHandler(async (req, res, next) => {
+    try {
+      const post = await Post.findById(req.params.id);
+      const likes = post.likes.map((l) => l.user);
+      if (likes.length === 0) {
+        console.log(likes, req.url);
+        res.status(400).json({
+          message: "The list is empty!",
+        });
+      } else {
+        console.log(likes, req.url);
+        const users = await User.find(...likes);
+        res.status(200).json(users);
+      }
+    } catch (error) {
+      res.status(400).json({
+        message: "No post found",
+        stack: error,
+      });
+    }
+  });
+export {
+  getAllPosts,
+  getPostById,
+  createPost,
+  editPost,
+  deletePostById,
+  setLikes,
+  getPostLikesByUser,
+};

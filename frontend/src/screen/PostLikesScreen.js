@@ -7,17 +7,17 @@ import { getPostLikes } from "../utils/apiClient";
 
 const PostLikesScreen = () => {
   const { postId } = useParams();
+  console.log(postId);
   const {
     data: users,
     isLoading,
     isSuccess,
-  } = useQuery("PostLikes", () => getPostLikes(postId));
-
+  } = useQuery(["PostLikes", postId], getPostLikes);
   return (
     <>
       <Heading title="Liked by" backButton btnProfile />
       <UsersList
-        users={users}
+        users={users !== "The list is empty!" ? users : undefined}
         isLoading={isLoading}
         isSuccess={isSuccess}
         noPop

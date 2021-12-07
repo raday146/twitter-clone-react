@@ -6,13 +6,13 @@ import UserItem from "./UserItem";
 const UsersList = (props) => {
   const { users, isSuccess, isLoading, length, className, ...rest } = props;
 
-  if (isLoading) return <Spinner />;
-
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <ListGroup className={`border-bottom ${className}`} variant="flush">
-      {isSuccess ? (
+      {isSuccess && users ? (
         users
-          .slice(0, length)
+          ?.slice(0, length)
           .map((user) => <UserItem key={user._id} user={user} {...rest} />)
       ) : (
         <div className="message font-weight-bold">No users to show</div>

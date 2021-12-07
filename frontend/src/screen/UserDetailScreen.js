@@ -12,12 +12,14 @@ import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { useAuthUser } from "../context/authContext";
-import { getUserTimeline } from "../utils/apiClient";
+//import { getUserTimeline } from "../utils/apiClient";
+import { withStyles } from "@material-ui/styles";
 import { formatDate } from "../utils/date";
 import { useQueryClient } from "react-query";
 import { getUserById } from "../utils/apiClient";
+import styles from "../styles/UserDetailScreenStyle";
 
-const UserDetailScreen = () => {
+const UserDetailScreen = ({ classes }) => {
   const { userId } = useParams();
   const queryClient = useQueryClient();
   const { currentUser } = useAuthUser();
@@ -62,7 +64,7 @@ const UserDetailScreen = () => {
           </Figure>
           {isAuthUser ? (
             <Link
-              className="btn btn-outline-primary px-3 rounded-pill font-weight-bold"
+              className={`${classes.btnEdit} btn btn-outline-primary my-3 center rounded-pill`}
               to="/settings/profile"
             >
               Edit profile
@@ -135,4 +137,4 @@ const UserDetailScreen = () => {
   );
 };
 
-export default UserDetailScreen;
+export default withStyles(styles)(UserDetailScreen);

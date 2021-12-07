@@ -51,7 +51,7 @@ const Header = ({ classes }) => {
               <NavLink
                 to={
                   item.name === "Profile"
-                    ? `${item.href}/${currentUser?.user?.name}`
+                    ? `${item.href}/${currentUser?.user?._id}`
                     : item.href
                 }
                 //className="px-xl-1 py-xl-1 p-1 mb-1 mx-lg-0 mx-auto btn btn-naked-primary rounded-pill font-weight-bold btn-lg d-flex align-items-center"

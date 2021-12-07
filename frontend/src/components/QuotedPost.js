@@ -12,7 +12,7 @@ const QuotedPost = ({ post, className, expanded = false }) => {
   }
 
   return (
-    <Card className={`${className} w-100 border bg-white overflow-hidden`}>
+    <Card className={`${className} w-100 border bg-light overflow-hidden`}>
       <Link className="stretched-link" to={`/post/${post._id}`} />
       <div className="p-2">
         <Row className="d-flex align-items-center">
@@ -40,16 +40,18 @@ const QuotedPost = ({ post, className, expanded = false }) => {
         <Row>
           <blockquote className="mb-1">
             <PostText
-              post={post}
+              text={post.text}
               to={`/post/${post._id}`}
               expanded={expanded}
             />
           </blockquote>
         </Row>
       </div>
-      <Row>
-        <MultiMedia post={post} className="rounded-0" />
-      </Row>
+      {!!post?.media && (
+        <Row>
+          <MultiMedia text={post?.text} className="rounded-0" />
+        </Row>
+      )}
     </Card>
   );
 };

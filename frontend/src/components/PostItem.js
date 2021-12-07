@@ -17,11 +17,11 @@ import { getUserById } from "../utils/apiClient";
 const PostItem = ({ post, ind, no_reply_tag }) => {
   const { currentUser } = useAuthUser();
   const { data: user, loading } = useQuery(
-    ["Post-user", post?.user?._id],
+    ["Post-user", post?.user],
     getUserById
   );
   console.log(post);
-  return loading ? (
+  return loading && !user ? (
     <Spinner />
   ) : (
     <ListGroup.Item className="px-3" action as="div">

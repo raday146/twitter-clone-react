@@ -1,12 +1,13 @@
+import React, { useState, useEffect, useCallback } from "react";
 import { faComment } from "@fortawesome/free-regular-svg-icons/faComment";
 import { faHeart } from "@fortawesome/free-regular-svg-icons/faHeart";
 import { faComment as commentSolid } from "@fortawesome/free-solid-svg-icons/faComment";
 import { faHeart as heartSolid } from "@fortawesome/free-solid-svg-icons/faHeart";
 import { faReply } from "@fortawesome/free-solid-svg-icons/faReply";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
 import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useAuthUser } from "../context/authContext";
 import {
   likePost,
   repostPost,
@@ -15,9 +16,24 @@ import {
 } from "../utils/apiClient";
 
 const ReactionsBar = ({ post }) => {
-  function handleToggleLike() {
-    post?.likes ? unlikePost(post) : likePost(post);
-  }
+  const { currentUser } = useAuthUser();
+  const [signHaert, setSignHaert] = useState(false);
+
+  const handleToggleLike = async () => {
+    await likePost(currentUser.token, post._id);
+  };
+
+  const checkLike = useCallback(() => {
+    return post?.likes.filter((l) => l.user === currentUser.user._id).length;
+  }, [currentUser.user._id, post?.likes]);
+
+  useEffect(() => {
+    if (post && !post?.likes) {
+      setSignHaert(false);
+    } else {
+      setSignHaert(checkLike());
+    }
+  }, [checkLike, post]);
 
   function handleToggleRepost() {
     post?.tweeted ? unrepostPost(post) : repostPost(post);
@@ -56,7 +72,7 @@ const ReactionsBar = ({ post }) => {
       </Dropdown>
       <Link
         to={`/compose/post?reply_to=${post._id}`}
-        className="btn btn-naked-secondary rounded-pill high-index"
+        className="btn btn-naked-secondary rounded-pill high-index m-2"
       >
         <FontAwesomeIcon
           style={{ fontSize: "1.2em" }}
@@ -66,9 +82,9 @@ const ReactionsBar = ({ post }) => {
       </Link>
       <button
         onClick={handleToggleLike}
-        className="btn btn-naked-danger rounded-pill high-index"
+        className="btn btn-naked-danger rounded-pill high-index m-2"
       >
-        {post?.liskes ? (
+        {signHaert ? (
           <FontAwesomeIcon icon={heartSolid} className="text-danger" />
         ) : (
           <FontAwesomeIcon icon={faHeart} />

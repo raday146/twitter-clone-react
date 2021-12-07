@@ -5,7 +5,7 @@ import getUrls from "get-urls";
 
 export default function MultiMedia(props) {
   const { text, media, expanded = false, className } = props;
-
+  console.log(text);
   let photo,
     url = [];
   if (media && media?.photo) {

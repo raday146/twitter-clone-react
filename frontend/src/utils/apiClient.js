@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useAuthUser } from "../context/authContext";
+import { queryClient } from "../providers/AppProvider";
 
 const clientApi = axios.create({
   baseURL: "http://localhost:3000/",
@@ -121,6 +121,7 @@ export const createPost = async (token, post) => {
       },
     };
     await axios.post("/api/posts", post, config);
+    await queryClient.invalidateQueries("Posts");
   } catch (error) {
     return error.response && error.response.data.message
       ? error.response.data.message
@@ -142,7 +143,6 @@ export const getPosts = async () => {
 export const getUserById = async ({ queryKey }) => {
   try {
     const id = queryKey[1];
-    console.log(id);
 
     if (!id) {
       return "No users";
@@ -156,6 +156,55 @@ export const getUserById = async ({ queryKey }) => {
       : error.message;
   }
 };
+export const getPost = async ({ queryKey }) => {
+  try {
+    const id = queryKey[1];
+    if (!id) {
+      return "No Post";
+    }
+    const { data } = await axios.get(`/api/posts/${id}`);
+    return data;
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+export const getPostLikes = async ({ queryKey }) => {
+  try {
+    const id = queryKey[1];
+    if (!id) {
+      return "No Post";
+    }
+    const { data } = await axios.get(`/api/posts/${id}/like`);
+    return data;
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+export const likePost = async (token, id) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios.post(`/api/posts/${id}/like`, config);
+    await queryClient.invalidateQueries("Posts");
+    console.log("like action end!");
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+export const getPostReposts = async () => {};
+export const repostPost = async () => {};
+
+export const unrepostPost = async () => {};
 
 export const getNotifications = () => async () => {};
 export const readNotifactions = async () => {};
@@ -166,13 +215,7 @@ export const followUser = async () => {};
 export const getTrends = async () => {};
 export const getFriends = async () => {};
 export const getPostById = async () => {};
-export const getPostLikes = async () => {};
-export const getPostReposts = async () => {};
 export const getSearchResults = async () => {};
 export const getUserFollowers = async () => {};
 export const getUserTimeline = async () => {};
 export const readNotification = async () => {};
-export const likePost = async () => {};
-export const repostPost = async () => {};
-export const unlikePost = async () => {};
-export const unrepostPost = async () => {};
