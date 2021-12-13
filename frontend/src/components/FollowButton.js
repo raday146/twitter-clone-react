@@ -1,16 +1,29 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "react-bootstrap";
 import { useAuthUser } from "../context/authContext";
-import { unfollowUser, followUser } from "../utils/apiClient";
+import { setHandlerFollow } from "../utils/apiClient";
 
-export default function FollowButton({ user }) {
-  const authUser = useAuthUser();
-  const [hoverText, setHoverText] = React.useState("");
-  const [hoverVariant, setHoverVariant] = React.useState("");
+const FollowButton = ({ user }) => {
+  const { currentUser } = useAuthUser();
+  const [hoverText, setHoverText] = useState("");
+  const [hoverVariant, setHoverVariant] = useState("");
+  const [follow, setFollow] = useState(false);
+  const textRef = useRef("");
+  //console.log(!currentUser.user?.following.includes(user._id));
+
+  useEffect(() => {
+    if (!currentUser?.user?.following.includes(user._id)) {
+      setFollow(false);
+      textRef.current = "Follow";
+    } else {
+      setFollow(true);
+      textRef.current = "Following";
+    }
+  }, [currentUser.user, user]);
 
   function handleMouseEnter() {
-    user.following && setHoverText("Unfollow");
-    user.following && setHoverVariant("danger");
+    follow && setHoverText("Unfollow");
+    follow && setHoverVariant("danger");
   }
 
   function handleMouseLeave() {
@@ -18,33 +31,33 @@ export default function FollowButton({ user }) {
     setHoverVariant("");
   }
 
-  async function handleUnfollowUser(event) {
-    event.preventDefault();
-    await unfollowUser(user.screen_name);
-    setHoverText("Unfollowed");
+  const followHandler = async (e) => {
+    e.preventDefault();
+    await setHandlerFollow(currentUser.token, user?._id);
+    setFollow(currentUser?.user?.following.includes(user._id));
+    if (follow) {
+      setHoverText("Unfollowed");
+    }
+  };
+
+  const variant = follow ? "primary" : "outline-primary";
+
+  const hideFollowButton = !user || currentUser?._id === user?._id;
+
+  if (hideFollowButton) {
+    return null;
   }
-
-  function handleFollowUser(event) {
-    event.preventDefault();
-    followUser(user.screen_name);
-  }
-
-  const text = user.following ? "Following" : "Follow";
-  const variant = user.following ? "primary" : "outline-primary";
-
-  const hideFollowButton = !user || authUser?.screen_name === user.screen_name;
-
-  if (hideFollowButton) return null;
 
   return (
     <Button
-      onClick={user.following ? handleUnfollowUser : handleFollowUser}
+      onClick={followHandler}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       variant={hoverVariant || variant}
-      className="rounded-pill px-3 py-1 font-weight-bold"
+      className={"rounded-pill py-2"}
     >
-      <span>{hoverText || text}</span>
+      <span>{hoverText || textRef.current}</span>
     </Button>
   );
-}
+};
+export default FollowButton;

@@ -14,22 +14,18 @@ import Divider from "@mui/material/Divider";
 import { useQuery } from "react-query";
 import { getUserById } from "../utils/apiClient";
 
-const PostItem = ({ post, ind, no_reply_tag }) => {
+const PostItem = ({ post, repost, ind, no_reply_tag }) => {
   const { currentUser } = useAuthUser();
   const { data: user, loading } = useQuery(
     ["Post-user", post?.user],
     getUserById
   );
-  console.log(post);
   return loading && !user ? (
     <Spinner />
   ) : (
     <ListGroup.Item className="px-3" action as="div">
-      <Row className="d-flex px-3 pb-1 mt-n2 text-muted">
-        <PostTag post={post} no_reply_tag={no_reply_tag} />
-      </Row>
       <Link className="stretched-link" to={`/post/${post._id}`} />
-      <div className="media mb-n2 w-100">
+      <div className="media mb-n2 w-100 my-3">
         <UserLink
           user={user}
           className="rounded-circle"
@@ -55,10 +51,10 @@ const PostItem = ({ post, ind, no_reply_tag }) => {
               {currentUser.user.name}
             </UserLink>
             <span className="text-muted mr-1">@{currentUser?.user.name}</span>
-            <pre className="m-0 text-muted">{" - "}</pre>
             <span className="text-muted my-2">
               {post && formatCreatedAt(post.createdAt)}
             </span>
+            <PostTag post={post} no_reply_tag={no_reply_tag} />
           </Row>
           <Row className=" my-2 mb-n1 mt-1">
             <blockquote className="mb-1 mw-100">

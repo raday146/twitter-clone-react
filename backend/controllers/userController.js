@@ -58,7 +58,7 @@ const updateProfile = () =>
           new AppError("This route is not for password update.", 400)
         );
       }
-
+      const defaultAvatar = !req.body.avatar;
       //2) filterd out unwanted fields names that are not allowed to update
       const filterBody = filterObj(
         req.body,
@@ -70,11 +70,11 @@ const updateProfile = () =>
         "banner",
         "urls"
       );
-
       //3) update user document
       const updatedUser = await User.findByIdAndUpdate(
         req.user.id,
         filterBody,
+        defaultAvatar,
         {
           new: true,
           runValidators: true,
@@ -112,4 +112,51 @@ const getUser = () =>
     // console.log(req.locals);
   });
 
-export { myProfile, updateProfile, getUser };
+const getUsers = () =>
+  asyncHandler(async (req, res) => {
+    try {
+      const users = await User.find({}).select("-password"); //.populate("user", "name avatar");;
+      if (users) {
+        res.status(201).json(users);
+      } else {
+        res.status(404).json({
+          message: "Not found any users",
+        });
+      }
+    } catch (error) {
+      res.status(404).json({
+        message: error + "no",
+      });
+    }
+    // console.log(req.locals);
+  });
+const followHandler = () =>
+  asyncHandler(async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const user = await User.findById(req.user._id);
+
+      if (userId && user.following.includes(userId)) {
+        await User.updateOne(
+          { _id: user._id },
+          { $inc: { numFollowing: -1 }, $pull: { following: userId } }
+        );
+        res.status(200).json("You remove the follow!");
+      } else {
+        await User.updateOne(
+          { _id: user._id },
+          {
+            $inc: { numFollowing: 1 },
+            $push: { following: userId },
+          }
+        );
+        res.status(200).json("You start to follow!");
+      }
+    } catch (error) {
+      res.status(400).json({
+        message: "User not found",
+        stack: error.stack,
+      });
+    }
+  });
+export { myProfile, updateProfile, getUser, getUsers, followHandler };

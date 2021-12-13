@@ -3,12 +3,12 @@ import WithUrls from "./WithUrls";
 import { truncateText } from "../utils/truncate";
 import { useNavigate } from "react-router-dom";
 
-export default function PostText({ text, to, expanded = false }) {
+const PostText = ({ text, to, expanded = false }) => {
   const history = useNavigate();
   if (!expanded) {
     text = truncateText(text, 5);
   }
-  console.log(text);
+
   return (
     <div
       {...OnClick((e) => {
@@ -18,7 +18,7 @@ export default function PostText({ text, to, expanded = false }) {
       <WithUrls>{text}</WithUrls>
     </div>
   );
-}
+};
 
 const OnClick = (() => {
   let clickTime = 0;
@@ -39,3 +39,4 @@ const OnClick = (() => {
     },
   });
 })();
+export default PostText;

@@ -8,36 +8,43 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useAuthUser } from "../context/authContext";
-import {
-  likePost,
-  repostPost,
-  unlikePost,
-  unrepostPost,
-} from "../utils/apiClient";
+import { likePost, repostPost } from "../utils/apiClient";
 
 const ReactionsBar = ({ post }) => {
   const { currentUser } = useAuthUser();
   const [signHaert, setSignHaert] = useState(false);
+  const [signRePost, setSignRePost] = useState(false);
 
-  const handleToggleLike = async () => {
-    await likePost(currentUser.token, post._id);
-  };
-
-  const checkLike = useCallback(() => {
-    return post?.likes.filter((l) => l.user === currentUser.user._id).length;
-  }, [currentUser.user._id, post?.likes]);
+  const checkItems = useCallback(
+    (items, op) => {
+      if (op) {
+        return items?.filter((i) => i.user === currentUser.user._id).length;
+      }
+      return items?.filter((i) => i === currentUser.user._id).length;
+    },
+    [currentUser.user._id]
+  );
 
   useEffect(() => {
     if (post && !post?.likes) {
       setSignHaert(false);
     } else {
-      setSignHaert(checkLike());
+      setSignHaert(checkItems(post?.likes, "like"));
     }
-  }, [checkLike, post]);
+    if (post && !post?.userRepostList) {
+      setSignRePost(false);
+    } else {
+      setSignRePost(checkItems(post?.userRepostList));
+    }
+  }, [checkItems, post]);
 
-  function handleToggleRepost() {
-    post?.tweeted ? unrepostPost(post) : repostPost(post);
-  }
+  const handleToggleLike = async () => {
+    await likePost(currentUser.token, post._id);
+  };
+
+  const handleToggleRepost = async () => {
+    await repostPost(currentUser.token, post._id);
+  };
 
   return (
     <div className="d-flex align-items-center">
@@ -46,8 +53,8 @@ const ReactionsBar = ({ post }) => {
           className="btn btn-naked-primary rounded-pill"
           id="comment-dropdown"
         >
-          {post?.tweeted ? (
-            <FontAwesomeIcon icon={commentSolid} className="text-success" />
+          {!post?.privateTweet && signRePost ? (
+            <FontAwesomeIcon icon={commentSolid} className="text-secondary" />
           ) : (
             <FontAwesomeIcon icon={faComment} />
           )}
@@ -59,7 +66,7 @@ const ReactionsBar = ({ post }) => {
             className="high-index"
             as="button"
           >
-            {post.tweeted ? "Undo Repost" : "Repost"}
+            {signRePost ? "Undo Repost" : "Repost"}
           </Dropdown.Item>
           <Dropdown.Item
             as={Link}

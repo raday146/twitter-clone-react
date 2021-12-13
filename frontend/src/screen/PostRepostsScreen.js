@@ -11,7 +11,7 @@ export default function PostRepostsScreen() {
     data: users,
     isLoading,
     isSuccess,
-  } = useQuery("PostReposts", () => getPostReposts(postId));
+  } = useQuery(["PostReTweets", postId], getPostReposts);
 
   return (
     <>

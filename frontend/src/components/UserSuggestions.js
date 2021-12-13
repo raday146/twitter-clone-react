@@ -1,23 +1,21 @@
 import UsersList from "./UsersList";
 import React from "react";
 import { useQuery } from "react-query";
-import { getUserSuggestions } from "../utils/apiClient";
+import { suggestionsToUser } from "../utils/apiClient";
 
 const UserSuggestions = (props) => {
-  const { authUser, ...rest } = props;
+  const { userId, following, ...rest } = props;
   const { data, isLoading, isSuccess } = useQuery(
-    "UserSuggestions",
-    getUserSuggestions
+    "suggestions",
+    suggestionsToUser
   );
 
   const users = data?.filter(
-    (user) => user.name !== authUser?.name && !user.following
+    (user) => user._id !== userId && following?.includes(user._id)
   );
 
   if (!users?.length) {
-    return (
-      <div className="text-primary message">No user suggestions for you</div>
-    );
+    return <div className="text-primary message">No suggestions for you</div>;
   }
 
   return (

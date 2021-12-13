@@ -4,36 +4,42 @@ import React from "react";
 import { Col, ListGroup, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { truncateText } from "../utils/truncate";
-
-const UserItem = ({ user, noPop, compact }) => {
+import { withStyles } from "@material-ui/styles";
+import styles from "../styles/userItemStyle";
+const UserItem = ({ user, noPop, compact, classes }) => {
+  //pr-5 pr-lg-4 pr-xl-2 mx-3 py-2" xs="8"
   return (
     <ListGroup.Item
-      className="px-1 text-truncate"
-      action
+      className={` ${classes.btn} px-1 text-truncate `}
       user={user}
       as={noPop ? Link : UserLink}
       to={`/user/${user?._id}`}
     >
-      <div className="Media">
+      <div className={` ${classes.userCard} Media`}>
         <img
           width={50}
           height={50}
-          className="rounded-circle mx-1"
+          className="rounded-circle mx-3"
           src={user?.avatar}
           alt={user?.name}
         />
-        <div className="Media-Body">
+        <div className="Media-Body ">
           <Row>
-            <Col className="pr-5 pr-lg-4 pr-xl-2" xs="8">
-              <p className="text-dark mb-0 text-truncate text-capitalize font-weight-bold">
+            <Col className="py-3" xs="12">
+              <p
+                className={`${classes.linkName} text-dark mb-0 text-truncate text-capitalize`}
+              >
                 {user?.name}
               </p>
-              <p className="text-muted text-truncate mt-n1"> @{user?.name}</p>
+              <p
+                className={`${classes.linkName} text-muted text-truncate mt-n1 py-1`}
+              >
+                {" "}
+                @{user?.name}
+              </p>
             </Col>
-            <Col
-              className="d-flex align-items-center justify-content-end px-1"
-              xs="4"
-            >
+
+            <Col>
               <FollowButton user={user} />
             </Col>
           </Row>
@@ -49,4 +55,4 @@ const UserItem = ({ user, noPop, compact }) => {
     </ListGroup.Item>
   );
 };
-export default UserItem;
+export default withStyles(styles)(UserItem);

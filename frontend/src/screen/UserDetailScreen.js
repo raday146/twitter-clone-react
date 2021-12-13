@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { faCalendarAlt as faDate } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
 import { faLink } from "@fortawesome/free-solid-svg-icons/faLink";
 import { faLocationArrow as faLocation } from "@fortawesome/free-solid-svg-icons/faLocationArrow";
@@ -12,7 +12,6 @@ import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { useAuthUser } from "../context/authContext";
-//import { getUserTimeline } from "../utils/apiClient";
 import { withStyles } from "@material-ui/styles";
 import { formatDate } from "../utils/date";
 import { useQueryClient } from "react-query";
@@ -23,7 +22,6 @@ const UserDetailScreen = ({ classes }) => {
   const { userId } = useParams();
   const queryClient = useQueryClient();
   const { currentUser } = useAuthUser();
-  console.log("id: ", userId);
   const data = queryClient.getQueryData("User-posts");
   const {
     data: user,
@@ -37,7 +35,6 @@ const UserDetailScreen = ({ classes }) => {
     return <div className="message font-weight-bold">User not found</div>;
   }
 
-  console.log("user: ", user);
   const isAuthUser = currentUser?.user?.name === user?.name;
   const expanded_url = user?.urls[0];
   const url = user?.urls[0];

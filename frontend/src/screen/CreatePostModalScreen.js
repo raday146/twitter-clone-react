@@ -9,7 +9,7 @@ import { Alert, Modal, OverlayTrigger, Popover, Button } from "react-bootstrap";
 import { useQuery } from "react-query";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuthUser } from "../context/authContext";
-import { createPost, getPostById } from "../utils/apiClient";
+import { createPost, getPost } from "../utils/apiClient";
 import { isTextValid, validate } from "../utils/validate";
 
 const CreatePostModalScreen = ({ location }) => {
@@ -17,31 +17,27 @@ const CreatePostModalScreen = ({ location }) => {
   const locationParam = useLocation();
   const quoteId = new URLSearchParams(locationParam.search).get("quote");
   const replyId = new URLSearchParams(locationParam.search).get("reply_to");
+
+  const { data: quotePost } = useQuery(["QuotePost", quoteId], getPost, {
+    enabled: Boolean(!!quoteId),
+  });
+
+  const { data: replyPost } = useQuery(["ReplyPost", replyId], getPost, {
+    enabled: Boolean(!!replyId),
+  });
+
   const { currentUser } = useAuthUser();
   const redirect = location?.search ? location.search.split("=")[1] : "/login";
+
+  const textRef = useRef();
+  const [disabled, setDisabled] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!!!currentUser) {
       navigate(redirect);
     }
   }, [currentUser, navigate, redirect]);
-  const { data: quotePost } = useQuery(
-    "QuotePost",
-    () => getPostById(quoteId),
-    {
-      enabled: Boolean(quoteId),
-    }
-  );
-  const { data: replyPost } = useQuery(
-    "ReplyPost",
-    () => getPostById(replyId),
-    {
-      enabled: Boolean(replyId),
-    }
-  );
-  const textRef = useRef();
-  const [disabled, setDisabled] = useState(false);
-  const [error, setError] = useState(null);
 
   function handleChange(event) {
     setDisabled(!isTextValid(textRef.current.value));
@@ -58,14 +54,16 @@ const CreatePostModalScreen = ({ location }) => {
       let post = { text: content };
       let url;
       if (replyId) {
-        url = `/api/post/${replyId}/reply`;
+        post = {
+          ...post,
+          isReplay: true,
+          mainPostStringId: quotePost._id,
+        };
       } else if (quotePost) {
         post = {
           ...post,
-          is_quote_status: true,
-          quoted_status_id: quotePost.id,
-          quoted_status_id_str: quotePost.id_str,
-          quoted_status: quotePost._id,
+          isQouted: true,
+          mainPostStringId: quotePost._id,
         };
       }
       await createPost(post, url);
@@ -124,14 +122,14 @@ const CreatePostModalScreen = ({ location }) => {
         <div className="media h-100 w-100">
           <img
             className="rounded-circle"
-            src={currentUser?.image}
-            alt={currentUser?.name}
+            src={currentUser?.user?.avatar}
+            alt={currentUser?.user?.name}
             width={50}
             height={50}
           />
-          <div className="media-body h-100 w-50" style={{ minHeight: "175px" }}>
+          <div className="media-body w-50 mt-3" style={{ minHeight: "175px" }}>
             <textarea
-              className="w-100 p-2 pb-5"
+              className="w-100 p-2 pb-4"
               style={{ height: "auto" }}
               name="text"
               onChange={handleChange}
@@ -151,11 +149,11 @@ const CreatePostModalScreen = ({ location }) => {
               placement="auto-start"
               overlay={picker}
             >
-              <button className="text-primary btn btn-lg rounded-circle btn-naked-primary p-2">
+              <button className="text-primary btn btn-lg rounded-circle btn-naked-primary p-2 m-2">
                 <FontAwesomeIcon size="lg" icon={faSmile} />
               </button>
             </OverlayTrigger>
-            <button className="disabled text-primary btn btn-lg rounded-circle btn-naked-primary ">
+            <button className="disabled text-primary btn btn-lg rounded-circle btn-naked-primary p-2 ">
               <FontAwesomeIcon size="lg" icon={faImage} />
             </button>
           </div>

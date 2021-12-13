@@ -4,15 +4,20 @@ import { Link } from "react-router-dom";
 import { useAuthUser } from "../context/authContext";
 import UserSuggestions from "./UserSuggestions";
 
-export default function FollowCard(props) {
+const FollowCard = (props) => {
   const { currentUser } = useAuthUser();
   const { className, title, length, ...rest } = props;
 
   return (
     <Card className={className}>
       <Card.Header>{title}</Card.Header>
-      {currentUser ? (
-        <UserSuggestions authUser={currentUser} length={length} {...rest} />
+      {currentUser?.user ? (
+        <UserSuggestions
+          userId={currentUser?.user._id}
+          following={currentUser?.user?.following}
+          length={length}
+          {...rest}
+        />
       ) : (
         <div className="text-primary message">
           Login to see users and their posts
@@ -25,4 +30,6 @@ export default function FollowCard(props) {
       </Card.Footer>
     </Card>
   );
-}
+};
+
+export default FollowCard;

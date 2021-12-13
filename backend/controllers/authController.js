@@ -45,7 +45,6 @@ const signup = () =>
         stack: error.message,
       });
     }
-    console.log("s");
   });
 
 const login = () =>

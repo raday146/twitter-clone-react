@@ -1,11 +1,21 @@
 import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
 import asyncHandler from "express-async-handler";
+import ApiFeaturs from "../utils/ApiFeaturs.js";
+
+const aliasPostToFilter = (req, res, next) => {
+  //req.query.limit = "1";
+  req.query.sort = "-createdAt";
+  //req.query.fields = "mainPostStringId,user";
+  next();
+};
 
 const getAllPosts = () =>
   asyncHandler(async (req, res, next) => {
     try {
-      const posts = await Post.find({});
+      // const posts = await Post.find({});
+      const features = new ApiFeaturs(Post.find({}), req.query).sort();
+      const posts = await features.query;
       console.log("get all the posts function ! ");
       res.status(200).json(posts);
     } catch (error) {
@@ -46,7 +56,6 @@ const createPost = () =>
           "An issue ware accure in creating the post, please try in another time.",
         stack: error.message,
       });
-      bv;
     }
   });
 const editPost = () => asyncHandler(async (req, res, next) => {});
@@ -94,12 +103,10 @@ const getPostLikesByUser = () =>
       const post = await Post.findById(req.params.id);
       const likes = post.likes.map((l) => l.user);
       if (likes.length === 0) {
-        console.log(likes, req.url);
         res.status(400).json({
           message: "The list is empty!",
         });
       } else {
-        console.log(likes, req.url);
         const users = await User.find(...likes);
         res.status(200).json(users);
       }
@@ -110,6 +117,80 @@ const getPostLikesByUser = () =>
       });
     }
   });
+
+const getRepostsByUser = (req, res) =>
+  asyncHandler(async (req, res, next) => {
+    try {
+      const post = await Post.findById(req.params.id);
+
+      if (post.tweetCount > 0) {
+        const userList = post.userRepostList.map((r) => r);
+        const users = await User.find({
+          _id: {
+            $in: userList.map((u) => u),
+          },
+        });
+        res.status(200).json(users);
+      } else {
+        res.status(400).json({
+          message: "The list is empty!",
+        });
+      }
+      /*const rePosts = post.rePosts.map((r) => r.user);
+      if (rePosts.length === 0) {
+        res.status(400).json({
+          message: "The list is empty!",
+        });
+      } else {
+        const users = await User.find(...rePosts);
+        res.status(200).json(users);
+      }*/
+    } catch (error) {
+      res.status(400).json({
+        message: "No post found",
+        stack: error,
+      });
+    }
+  });
+const setRepost = () =>
+  asyncHandler(async (req, res, next) => {
+    try {
+      const post = await Post.findById(req.params.id);
+
+      const alreadyReposted = post.userRepostList.find(
+        (r) => r.toString() === req.user._id.toString()
+      );
+      if (!!alreadyReposted) {
+        await Post.deleteOne({ mainPostStringId: req.params.id });
+        post.userRepostList.remove(req.user._id.toString());
+        post.tweetCount = post.userRepostList.length;
+        await post.save();
+        res.status(200).json({
+          message: "You remove retweet",
+        });
+      } else {
+        const retweet = await Post.create({
+          text: post.text,
+          author: req.user.name,
+          user: req.user._id,
+          mainPostStringId: post._id,
+          rTweeted: true,
+          userRepostList: [],
+        });
+
+        post.userRepostList.push(req.user._id);
+        post.tweetCount = post.userRepostList.length;
+        await post.save();
+        res.status(200).json(retweet);
+      }
+    } catch (error) {
+      res.status(400).json({
+        message: "No post found",
+        stack: error,
+      });
+    }
+  });
+
 export {
   getAllPosts,
   getPostById,
@@ -118,4 +199,7 @@ export {
   deletePostById,
   setLikes,
   getPostLikesByUser,
+  getRepostsByUser,
+  aliasPostToFilter,
+  setRepost,
 };

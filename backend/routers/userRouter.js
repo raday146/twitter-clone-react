@@ -10,6 +10,8 @@ import {
   myProfile,
   updateProfile,
   getUser,
+  getUsers,
+  followHandler,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -34,8 +36,10 @@ router.post("/signup", signup());
  */
 
 router.post("/login", login()).post("/logout", logout);
+router.get("/", getUsers());
 router.get("/:id", getUser());
 router.use(protect);
+router.post("/:id/follow", followHandler());
 router.route("/profile").get(myProfile()).put(updateProfile());
 
 /*

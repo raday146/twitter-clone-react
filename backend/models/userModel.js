@@ -2,40 +2,6 @@ import mongoose from "mongoose";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 
-const followerSchema = mongoose.Schema({
-  follow: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  users: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
-  ],
-  numFollowers: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-});
-
-const friendsSchema = mongoose.Schema({
-  users: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
-  ],
-  numFriends: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-});
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -74,9 +40,28 @@ const userSchema = mongoose.Schema(
       required: true,
       default: "Unknown",
     },
-    followers: [followerSchema],
-    friends: [friendsSchema],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    friends: [
+      {
+        type: String,
+      },
+    ],
+    numFriends: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     favoritesCount: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    numFollowing: {
       type: Number,
       required: true,
       default: 0,

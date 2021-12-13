@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PostsList from "./PostsList";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import { getPosts } from "../utils/apiClient";
 import FollowCard from "./FollowCard";
 import Spinner from "./Spinner";
@@ -8,7 +8,6 @@ import { Row, Col } from "react-bootstrap";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 const Feed = () => {
-  //const { data, loading } = useQuery("Posts", getPosts);
   const [page, setPage] = useState(2);
   const [hasFinished, setHasFinished] = useState(false);
   const {
@@ -19,10 +18,10 @@ const Feed = () => {
     hasNextPage,
     fetchNextPage,
   } = useInfiniteQuery("Posts", getPosts);
-  //console.log(posts);
 
   useEffect(() => {
-    setHasFinished(!hasNextPage);
+    const checkLast = posts?.pages.some((page) => page.length < 10);
+    setHasFinished(checkLast);
   }, [hasNextPage, posts]);
 
   useBottomScrollListener(() => {
@@ -55,7 +54,7 @@ const Feed = () => {
             </div>
             <FollowCard
               noPop
-              length={7}
+              length={3}
               title="Follow more users to see their posts"
             />
           </>

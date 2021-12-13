@@ -51,6 +51,8 @@ export const login = async (email, password) => {
 
 export const signUp = async (name, email, password) => {
   try {
+    const avatar =
+      "https://res.cloudinary.com/dapifwhwo/image/upload/v1639183794/default-avatar_lossy8.jpg";
     console.log("start");
     const config = {
       headers: {
@@ -60,7 +62,7 @@ export const signUp = async (name, email, password) => {
 
     await clientApi.post(
       "/api/users/signup",
-      { name, email, password },
+      { name, email, password, avatar },
       config
     );
     window.location.pathname = "/login";
@@ -147,7 +149,6 @@ export const getUserById = async ({ queryKey }) => {
     if (!id) {
       return "No users";
     }
-    console.log(id);
     const { data } = await axios.get(`/api/users/${id}`);
     return data;
   } catch (error) {
@@ -194,6 +195,9 @@ export const likePost = async (token, id) => {
     };
     await axios.post(`/api/posts/${id}/like`, config);
     await queryClient.invalidateQueries("Posts");
+    await queryClient.invalidateQueries("PostDetail");
+    await queryClient.invalidateQueries("PostReplies");
+    await queryClient.invalidateQueries("UserDetail");
     console.log("like action end!");
   } catch (error) {
     return error.response && error.response.data.message
@@ -201,21 +205,80 @@ export const likePost = async (token, id) => {
       : error.message;
   }
 };
-export const getPostReposts = async () => {};
-export const repostPost = async () => {};
+export const getPostReposts = async ({ queryKey }) => {
+  try {
+    const id = queryKey[1];
+    if (!id) {
+      return "No Post";
+    }
+    const { data } = await axios.get(`/api/posts/${id}/reposts`);
+    return data;
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+export const repostPost = async (token, id) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios.post(`/api/posts/${id}/reposts`, config);
+    await queryClient.invalidateQueries("Posts");
+    await queryClient.invalidateQueries("PostReTweets");
+    await queryClient.invalidateQueries("PostDetail");
+    await queryClient.invalidateQueries("UserDetail");
 
-export const unrepostPost = async () => {};
+    console.log("like action end!");
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+
+export const suggestionsToUser = async () => {
+  try {
+    const { data } = await clientApi.get("/api/users");
+    return data;
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+
+export const setHandlerFollow = async (token, id) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios.post(`/api/users/${id}/follow`, config);
+    await queryClient.invalidateQueries("suggestions");
+    await queryClient.invalidateQueries("Posts");
+    await queryClient.invalidateQueries("UserDetail");
+    console.log("follow action end!");
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
 
 export const getNotifications = () => async () => {};
-export const readNotifactions = async () => {};
-export const getReplies = async () => {};
-export const getUserSuggestions = async () => {};
+export const getUserFollowers = async () => {};
 export const unfollowUser = async () => {};
 export const followUser = async () => {};
 export const getTrends = async () => {};
 export const getFriends = async () => {};
 export const getPostById = async () => {};
 export const getSearchResults = async () => {};
-export const getUserFollowers = async () => {};
 export const getUserTimeline = async () => {};
 export const readNotification = async () => {};

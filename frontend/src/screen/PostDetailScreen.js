@@ -38,9 +38,6 @@ const PostDetailScreen = () => {
     <>
       <Heading backButton title="Post" />
       <Col className="p-3 d-flex flex-column">
-        <Row className="d-flex px-3 pb-1 mt-n2 text-muted">
-          <PostTag post={post} />
-        </Row>
         <Row>
           <Row>
             <UserLink
@@ -66,10 +63,10 @@ const PostDetailScreen = () => {
               >
                 {post?.user?.name}
               </UserLink>
-              <span className="text-muted mr-1">@{post?.user?.name}</span>
+              <span className="text-muted mb-2 mr-1">@{post?.user?.name}</span>
+              <PostTag post={post} />
             </Col>
           </Row>
-          <Row></Row>
         </Row>
         <Row>
           <blockquote style={{ fontSize: "1.5em" }} className="my-2 mw-100">
@@ -85,7 +82,6 @@ const PostDetailScreen = () => {
         <Row>
           <span className="text-muted pb-2">
             {formatTime(post.createdAt)}
-            {" - "}
             {formatDate(post.createdAt)}
           </span>
         </Row>

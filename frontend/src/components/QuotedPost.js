@@ -10,7 +10,6 @@ const QuotedPost = ({ post, className, expanded = false }) => {
   if (!post) {
     return null;
   }
-
   return (
     <Card className={`${className} w-100 border bg-light overflow-hidden`}>
       <Link className="stretched-link" to={`/post/${post._id}`} />
@@ -34,7 +33,6 @@ const QuotedPost = ({ post, className, expanded = false }) => {
             {post?.user?.name}
           </UserLink>
           <span className="text-muted">@{post?.user?.name}</span>
-          <pre className="m-0 text-muted">{" - "}</pre>
           <span className="text-muted">{formatCreatedAt(post.createdAt)}</span>
         </Row>
         <Row>
