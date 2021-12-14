@@ -8,9 +8,10 @@ import { withStyles } from "@material-ui/styles";
 import styles from "../styles/userItemStyle";
 const UserItem = ({ user, noPop, compact, classes }) => {
   //pr-5 pr-lg-4 pr-xl-2 mx-3 py-2" xs="8"
+  console.log(noPop);
   return (
     <ListGroup.Item
-      className={` ${classes.btn} px-1 text-truncate `}
+      className={` px-1 text-truncate`}
       user={user}
       as={noPop ? Link : UserLink}
       to={`/user/${user?._id}`}

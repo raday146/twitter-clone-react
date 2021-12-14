@@ -6,10 +6,13 @@ import FollowCard from "./FollowCard";
 import Spinner from "./Spinner";
 import { Row, Col } from "react-bootstrap";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useAuthUser } from "../context/authContext";
 
 const Feed = () => {
   const [page, setPage] = useState(2);
   const [hasFinished, setHasFinished] = useState(false);
+  const { currentUser } = useAuthUser();
+
   const {
     data: posts,
     isLoading,
@@ -17,7 +20,7 @@ const Feed = () => {
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-  } = useInfiniteQuery("Posts", getPosts);
+  } = useInfiniteQuery(["Posts", currentUser?.user._id], getPosts);
 
   useEffect(() => {
     const checkLast = posts?.pages.some((page) => page.length < 10);
@@ -53,7 +56,7 @@ const Feed = () => {
               You have reached the end!
             </div>
             <FollowCard
-              noPop
+              on={true}
               length={3}
               title="Follow more users to see their posts"
             />

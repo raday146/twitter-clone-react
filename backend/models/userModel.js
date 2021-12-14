@@ -46,6 +46,12 @@ const userSchema = mongoose.Schema(
         ref: "User",
       },
     ],
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     friends: [
       {
         type: String,
@@ -62,6 +68,11 @@ const userSchema = mongoose.Schema(
       default: 0,
     },
     numFollowing: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    numFollowers: {
       type: Number,
       required: true,
       default: 0,

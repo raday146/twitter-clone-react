@@ -7,7 +7,6 @@ import UserSuggestions from "./UserSuggestions";
 const FollowCard = (props) => {
   const { currentUser } = useAuthUser();
   const { className, title, length, ...rest } = props;
-
   return (
     <Card className={className}>
       <Card.Header>{title}</Card.Header>

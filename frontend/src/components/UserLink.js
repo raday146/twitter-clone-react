@@ -1,12 +1,13 @@
-import FollowButton from "./FollowButton";
 import React, { forwardRef, useState } from "react";
+import FollowButton from "./FollowButton";
 import { Card, Figure, OverlayTrigger, Popover, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { formatDate } from "../utils/date";
 import { truncateText } from "../utils/truncate";
 
-const UserLink = ({ user, ...props }) => {
-  const [show, setShow] = useState(false);
+const UserLink = ({ user, on, ...props }) => {
+  const [show, setShow] = useState(on);
+
   return (
     <OverlayTrigger
       show={show}
@@ -20,14 +21,21 @@ const UserLink = ({ user, ...props }) => {
 };
 
 const UserPopover = forwardRef(({ user, setShow, ...props }, ref) => {
+  const handleMouseLeave = () => {
+    setShow(false);
+  };
+  const handleMouseEnter = () => {
+    setShow(true);
+  };
   return (
     <Popover className="border-0" ref={ref} id="user-popover" {...props}>
       <Card
-        onMouseEnter={() => setShow(true)}
-        onMouseLeave={() => setShow(undefined)}
+        on
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className="border p-3 bg-transparent m-0"
       >
-        <Row className="d-flex justify-content-between align-items-center">
+        <Row className="">
           <Figure
             style={{ height: "65px", width: "65px" }}
             className="rounded-circle overflow-hidden bg-primary mr-3"
@@ -49,10 +57,10 @@ const UserPopover = forwardRef(({ user, setShow, ...props }, ref) => {
         </Row>
         <Row className="d-flex mt-1 mb-2">
           <em className="mr-2">
-            {user.followers_count} <span className="text-muted">Followers</span>
+            {user?.numFollowers} <span className="text-muted">Followers</span>
           </em>
           <div className="mr-2">
-            {user.friends_count} <span className="text-muted">Following</span>
+            {user?.numFollowing} <span className="text-muted">Following</span>
           </div>
         </Row>
       </Card>

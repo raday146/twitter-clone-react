@@ -7,7 +7,7 @@ const TrendingCard = ({ className, title }) => {
   return (
     <Card className={className}>
       <Card.Header>{title}</Card.Header>
-      <Trends length={4} />
+      <Trends length={2} />
       <Card.Footer>
         <Card.Link as={Link} to="/explore">
           Show more

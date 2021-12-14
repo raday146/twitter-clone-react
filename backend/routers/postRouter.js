@@ -13,6 +13,7 @@ import {
 } from "../controllers/postController.js";
 
 router.get("/", aliasPostToFilter, getAllPosts());
+router.get("/:id/all", aliasPostToFilter, getAllPosts());
 router.get("/:id", getPostById());
 router.route("/:id/like").get(getPostLikesByUser()).post(protect, setLikes());
 router.route("/:id/reposts").get(getRepostsByUser()).post(protect, setRepost());

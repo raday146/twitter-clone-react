@@ -11,7 +11,7 @@ const UserSuggestions = (props) => {
   );
 
   const users = data?.filter(
-    (user) => user._id !== userId && following?.includes(user._id)
+    (user) => user._id !== userId && !following?.includes(user._id)
   );
 
   if (!users?.length) {

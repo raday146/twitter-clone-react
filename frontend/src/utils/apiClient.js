@@ -131,10 +131,16 @@ export const createPost = async (token, post) => {
   }
 };
 
-export const getPosts = async () => {
+export const getPosts = async ({ queryKey }) => {
   try {
-    const { data } = await clientApi.get("/api/posts");
-    return data;
+    const userId = queryKey[1];
+    if (userId) {
+      const { data } = await clientApi.get(`/api/posts/${userId}/all`);
+      return data;
+    } else {
+      const { data } = await clientApi.get("/api/posts");
+      return data;
+    }
   } catch (error) {
     return error.response && error.response.data.message
       ? error.response.data.message
@@ -272,13 +278,19 @@ export const setHandlerFollow = async (token, id) => {
   }
 };
 
-export const getNotifications = () => async () => {};
 export const getUserFollowers = async () => {};
-export const unfollowUser = async () => {};
-export const followUser = async () => {};
-export const getTrends = async () => {};
+export const getTrends = async () => {
+  /* try {
+    const { data } = await axios.get(`/api/posts/trands`);
+    return data;
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }*/
+};
+
+export const getNotifications = () => async () => {};
 export const getFriends = async () => {};
-export const getPostById = async () => {};
 export const getSearchResults = async () => {};
-export const getUserTimeline = async () => {};
 export const readNotification = async () => {};

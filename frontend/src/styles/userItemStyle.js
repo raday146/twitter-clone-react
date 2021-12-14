@@ -1,12 +1,14 @@
 const styles = {
   userCard: {
     textAlign: "center",
+    marginLeft: "6%",
   },
   linkName: {
     display: "inline",
   },
   btn: {
-    marginLeft: "6%",
+ 
+    marginLeft: "0%",
   },
 };
 export default styles;

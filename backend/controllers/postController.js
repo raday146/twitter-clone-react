@@ -13,11 +13,22 @@ const aliasPostToFilter = (req, res, next) => {
 const getAllPosts = () =>
   asyncHandler(async (req, res, next) => {
     try {
-      // const posts = await Post.find({});
+      const userId = req.params.id;
       const features = new ApiFeaturs(Post.find({}), req.query).sort();
       const posts = await features.query;
-      console.log("get all the posts function ! ");
-      res.status(200).json(posts);
+      if (userId) {
+        const user = await User.findById(userId).populate("-password");
+        const allowedPosts = posts.filter(
+          (post) =>
+            post.user.toString() === userId ||
+            user.following.includes(post.user.toString())
+        );
+        console.log("get only the user posts and following user posts ! ");
+        res.status(200).json(allowedPosts);
+      } else {
+        console.log("get all the posts function ! ");
+        res.status(200).json(posts);
+      }
     } catch (error) {
       res.status(400).json({
         message: "No posts found!",
