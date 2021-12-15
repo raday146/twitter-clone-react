@@ -22,32 +22,7 @@ const likesSchema = mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
-const hashtagsSchema = mongoose.Schema(
-  {
-    isHashtag: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    hashtag: {
-      type: String,
-      required: true,
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
-    createdAt: Date,
-    changeAt: Date,
-  },
 
-  { timestamps: true },
-  {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  }
-);
 const symbolsSchema = mongoose.Schema(
   {
     isSymbols: {
@@ -183,7 +158,9 @@ const postSchema = mongoose.Schema(
       default: false,
     },
     tweetCount: { type: Number, required: true, default: 0 },
-    hashtags: [hashtagsSchema],
+    hashtags: {
+      type: String,
+    },
     symbols: [symbolsSchema],
     createdAt: Date,
     changeAt: Date,

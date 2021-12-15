@@ -1,15 +1,15 @@
+import React from "react";
 import Heading from "../components/Heading";
 import PostsList from "../components/PostsList";
 import UsersList from "../components/UsersList";
-import React from "react";
 import { useQuery } from "react-query";
-import { useNavigate, Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { getSearchResults } from "../utils/apiClient";
 
-export default function SearchResultsScreen() {
-  const history = useNavigate();
-  const query = new URLSearchParams(history.location.search).get("q");
+const SearchResultsScreen = () => {
+  const locationParam = useLocation();
+  const query = new URLSearchParams(locationParam.search).get("q");
   const { data, isLoading, isSuccess } = useQuery(["Search", query], () =>
     getSearchResults(query)
   );
@@ -30,4 +30,5 @@ export default function SearchResultsScreen() {
       )}
     </>
   );
-}
+};
+export default SearchResultsScreen;

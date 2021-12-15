@@ -9,26 +9,26 @@ const Trends = ({ length }) => {
   const { data: trends, isLoading, isSuccess } = useQuery("Trends", getTrends);
 
   if (isLoading) return <Spinner />;
-
-  if (!trends?.length) {
+  console.log(trends);
+  if (!trends || trends.length === 0) {
     return <div className="text-primary message">No trends right now</div>;
   }
 
   return (
     <ListGroup variant="flush">
-      {isSuccess
-        ? trends.slice(0, length).map((trend) => (
+      {isSuccess && !!trends
+        ? trends?.slice(0, length).map((trend) => (
             <ListGroup.Item
-              key={trend.name}
+              key={trend?.name}
               as={Link}
               action
-              to={`/search?q=${trend.query}`}
+              to={`/search?q=${trend?.name}`}
             >
               <small className="text-muted">Trending Worldwide</small>
               <p className="mb-1 text-dark font-weight-bold text-capitalize">
-                {trend.name}
+                {trend?.trend}
               </p>
-              <em>{trend.tweet_volume} Tweets</em>
+              <em>{trend?.tweetVolume} Tweets</em>
             </ListGroup.Item>
           ))
         : null}

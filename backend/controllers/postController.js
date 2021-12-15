@@ -1,12 +1,11 @@
 import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
+import Trend from "../models/TrendModel.js";
 import asyncHandler from "express-async-handler";
 import ApiFeaturs from "../utils/ApiFeaturs.js";
 
 const aliasPostToFilter = (req, res, next) => {
-  //req.query.limit = "1";
   req.query.sort = "-createdAt";
-  //req.query.fields = "mainPostStringId,user";
   next();
 };
 
@@ -55,11 +54,32 @@ const getPostById = () =>
 const createPost = () =>
   asyncHandler(async (req, res) => {
     try {
+      const hashtags = await Trend.schema.methods.checkHashtags(req.body.text);
+
       const newPost = await Post.create({
+        author: req.user.name,
         text: req.body.text,
         user: req.user._id,
+        hashtags: String(hashtags),
       });
-
+      const id = newPost._id;
+      if (hashtags.length > 0) {
+        console.log("in if");
+        const trend = await Trend.findOne({ trend: String(hashtags) });
+        if (trend) {
+          trend.postId.push(id);
+          trend.tweetVolume = trend.postId.length;
+          await trend.save();
+        } else {
+          console.log("in else");
+          await Trend.create({
+            trend: String(hashtags),
+            name: String(hashtags).substring(1),
+            postId: id,
+            tweetVolume: 1,
+          });
+        }
+      }
       res.status(200).json(newPost);
     } catch (error) {
       res.status(400).json({
@@ -147,15 +167,6 @@ const getRepostsByUser = (req, res) =>
           message: "The list is empty!",
         });
       }
-      /*const rePosts = post.rePosts.map((r) => r.user);
-      if (rePosts.length === 0) {
-        res.status(400).json({
-          message: "The list is empty!",
-        });
-      } else {
-        const users = await User.find(...rePosts);
-        res.status(200).json(users);
-      }*/
     } catch (error) {
       res.status(400).json({
         message: "No post found",

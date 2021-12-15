@@ -124,6 +124,10 @@ export const createPost = async (token, post) => {
     };
     await axios.post("/api/posts", post, config);
     await queryClient.invalidateQueries("Posts");
+    await queryClient.invalidateQueries("PostDetail");
+    await queryClient.invalidateQueries("PostReplies");
+    await queryClient.invalidateQueries("Trends");
+    await queryClient.invalidateQueries("UserDetail");
   } catch (error) {
     return error.response && error.response.data.message
       ? error.response.data.message
@@ -280,14 +284,15 @@ export const setHandlerFollow = async (token, id) => {
 
 export const getUserFollowers = async () => {};
 export const getTrends = async () => {
-  /* try {
-    const { data } = await axios.get(`/api/posts/trands`);
+  try {
+    const { data } = await axios.get("/api/trends");
+
     return data;
   } catch (error) {
     return error.response && error.response.data.message
       ? error.response.data.message
       : error.message;
-  }*/
+  }
 };
 
 export const getNotifications = () => async () => {};

@@ -9,15 +9,17 @@ const UserSuggestions = (props) => {
     "suggestions",
     suggestionsToUser
   );
-
+  const arr = ["israel", "shlomo", "yakov", "nati"];
   const users = data?.filter(
-    (user) => user._id !== userId && !following?.includes(user._id)
+    (user) => !following?.includes(user._id) && !String(user._id).match(userId)
   );
+  const names = arr.filter((name) => name !== "shlomo" && !name.includes("i"));
+  console.log(users);
 
+  console.log(names, !following?.includes("619bf37f0d7bb747ec210ef5"));
   if (!users?.length) {
     return <div className="text-primary message">No suggestions for you</div>;
   }
-
   return (
     <UsersList
       {...rest}

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-const trandSchema = mongoose.Schema(
+const trendSchema = mongoose.Schema(
   {
-    trand: {
+    trend: {
       type: String,
       required: true,
     },
@@ -21,10 +21,17 @@ const trandSchema = mongoose.Schema(
       require: true,
       default: 0,
     },
+    createdAt: Date,
+    changeAt: Date,
   },
+
   {
     timestamps: true,
   }
 );
-const Trand = mongoose.model("Tost", trandSchema);
-export default Trand;
+
+trendSchema.methods.checkHashtags = async function (checkString) {
+  return checkString.match(/\B(\#[a-zA-Z-1-9]+\b)(?!;)/g);
+};
+const Trend = mongoose.model("Trend", trendSchema);
+export default Trend;

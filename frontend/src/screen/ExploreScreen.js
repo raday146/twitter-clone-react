@@ -1,7 +1,7 @@
 import React from "react";
 import { Figure, Row, Col } from "react-bootstrap";
 import MediaQuery from "react-responsive";
-import { Routes, Route, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import FollowCard from "../components/FollowCard";
 import Heading from "../components/Heading";
 import SearchBar from "../components/SearchBar";
@@ -21,7 +21,7 @@ const ExploreScreen = ({ noSearchBar }) => {
         </div>
         <NavLink to="/explore/users">
           <Heading title="Users" />
-          <UserSuggestions length={10} noPop />
+          <UserSuggestions length={3} noPop />
         </NavLink>
 
         <MediaQuery maxWidth={992}>

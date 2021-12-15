@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import mongoSanitize from "express-mongo-sanitize";
 import userRouter from "./routers/userRouter.js";
 import postRouter from "./routers/postRouter.js";
+import trendRouter from "./routers/trendRouter.js";
 
 dotenv.config({ path: "./config.env" });
 import connectDB from "./config/db.js";
@@ -24,6 +25,7 @@ app.use(express.json({ limit: "10kb" }));
 // routing source
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);
+app.use("/api/trends", trendRouter);
 
 app.get("/", (req, res) => {
   res.send("api is running");
