@@ -12,6 +12,10 @@ import {
   getUser,
   getUsers,
   followHandler,
+  searchUsers,
+  getFollowers,
+  getFriends,
+  getNotifications,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -37,9 +41,14 @@ router.post("/signup", signup());
 
 router.post("/login", login()).post("/logout", logout);
 router.get("/", getUsers());
+router.get("/search-result", searchUsers());
 router.get("/:id", getUser());
+router.get("/:id/followers", getFollowers());
+router.get("/:id/friends", getFriends());
+
 router.use(protect);
 router.post("/:id/follow", followHandler());
+router.post("/notifications", getNotifications());
 router.route("/profile").get(myProfile()).put(updateProfile());
 
 /*

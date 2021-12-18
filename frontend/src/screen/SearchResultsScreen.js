@@ -9,24 +9,27 @@ import { getSearchResults } from "../utils/apiClient";
 
 const SearchResultsScreen = () => {
   const locationParam = useLocation();
-  const query = new URLSearchParams(locationParam.search).get("q");
-  const { data, isLoading, isSuccess } = useQuery(["Search", query], () =>
-    getSearchResults(query)
+  const query = new URLSearchParams(locationParam.search).get("keyword");
+  const { data, isLoading, isSuccess } = useQuery(
+    ["Search", query],
+    getSearchResults
   );
 
   if (!query) return <Navigate to="/explore" />;
   if (isLoading) return <Spinner />;
-
   return (
     <>
       <Heading title="Search" backButton btnProfile />
-      {data.users?.length && (
+      {data && data.users?.length && (
         <UsersList users={data.users} isSuccess={isSuccess} />
       )}
-      {data.posts?.length ? (
+      {data && data.posts?.length && (
         <PostsList posts={data.posts} isSuccess={isSuccess} />
+      )}
+      {data && data.trends?.length ? (
+        <PostsList posts={data.trends} isSuccess={isSuccess} />
       ) : (
-        <div className="message">No posts found</div>
+        <div className="message">No results</div>
       )}
     </>
   );

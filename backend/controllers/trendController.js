@@ -1,8 +1,8 @@
-import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
 import Trend from "../models/TrendModel.js";
 import asyncHandler from "express-async-handler";
 import ApiFeaturs from "../utils/ApiFeaturs.js";
+import mongoose from "mongoose";
 
 const aliasTrendToFilter = (req, res, next) => {
   req.query.limit = "2";
@@ -30,4 +30,23 @@ const getTrends = () =>
     }
   });
 
-export { getTrends, aliasTrendToFilter };
+const serachTrends = () =>
+  asyncHandler(async (req, res) => {
+    try {
+      const result = await Trend.findOne({
+        $text: { $search: req.query.keyword },
+      });
+
+      const postIds = result.postId.map((id) => id);
+      console.log(postIds, "44");
+
+      const trends = await Post.find({ _id: postIds });
+      res.status(200).json({ trends: trends });
+    } catch (error) {
+      res.status(400).json({
+        message: "No results",
+        stack: error.stack,
+      });
+    }
+  });
+export { getTrends, aliasTrendToFilter, serachTrends };

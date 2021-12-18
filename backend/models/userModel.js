@@ -2,6 +2,34 @@ import mongoose from "mongoose";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 
+const notificationSchema = mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      required: true,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    read: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+
+    createdAt: Date,
+    changeAt: Date,
+  },
+  {
+    timestamps: true,
+  }
+);
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -82,6 +110,8 @@ const userSchema = mongoose.Schema(
         type: String,
       },
     ],
+    numNotifications: { type: Number, required: true, default: 0 },
+    notifications: [notificationSchema],
     createdAt: Date,
     passwordChangedAt: Date,
     passwordResetToken: String,

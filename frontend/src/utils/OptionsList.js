@@ -28,7 +28,7 @@ export const headerList = [
     name: "Notifications",
     href: "/notifications",
     icon: faBell,
-    count: "notificationsCount",
+    count: true,
   },
   {
     name: "Chat Room",

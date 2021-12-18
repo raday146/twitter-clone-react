@@ -274,15 +274,13 @@ export const setHandlerFollow = async (token, id) => {
     await queryClient.invalidateQueries("suggestions");
     await queryClient.invalidateQueries("Posts");
     await queryClient.invalidateQueries("UserDetail");
-    console.log("follow action end!");
+    await queryClient.invalidateQueries("notifications");
   } catch (error) {
     return error.response && error.response.data.message
       ? error.response.data.message
       : error.message;
   }
 };
-
-export const getUserFollowers = async () => {};
 export const getTrends = async () => {
   try {
     const { data } = await axios.get("/api/trends");
@@ -294,8 +292,74 @@ export const getTrends = async () => {
       : error.message;
   }
 };
+export const getSearchResults = async ({ queryKey }) => {
+  try {
+    const input = String(queryKey[1]);
+    const keyword = String(queryKey[1]).substring(
+      1,
+      String(queryKey[1]).length
+    );
 
-export const getNotifications = () => async () => {};
-export const getFriends = async () => {};
-export const getSearchResults = async () => {};
+    let url = "";
+    switch (input.charAt(0)) {
+      case "#":
+        url = `/api/trends/search-result?keyword=${keyword}`;
+        break;
+      case "@":
+        url = `/api/users/search-result?keyword=${keyword}`;
+        break;
+      default:
+        url = `/api/posts/search-result?keyword=${input}`;
+    }
+    console.log(url);
+    const { data } = await axios.get(url);
+    return data;
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+export const getUserFollowers = async ({ queryKey }) => {
+  try {
+    const id = queryKey[1];
+    const { data } = await axios.get(`/api/users/${id}/followers`);
+    console.log("327 api ", data);
+    return data;
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+export const getFriends = async ({ queryKey }) => {
+  try {
+    const id = queryKey[1];
+    const { data } = await axios.get(`/api/users/${id}/friends`);
+    console.log("327 api ", data);
+    return data;
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
+export const getNotifications = async ({ queryKey }) => {
+  try {
+    const token = queryKey[1];
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.post("/api/users/notifications", config);
+    return data;
+    //await queryClient.invalidateQueries("notifications");
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};
 export const readNotification = async () => {};

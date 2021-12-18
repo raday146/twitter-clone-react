@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
+import ApiFeaturs from "../utils/ApiFeaturs.js";
 
 const filterObj = (obj, ...alloawedFields) => {
   const newObj = {};
@@ -135,11 +136,28 @@ const followHandler = () =>
     try {
       const userId = req.params.id;
       const user = await User.findById(req.user._id);
-
       if (userId && user.following.includes(userId)) {
         await User.updateOne(
           { _id: user._id },
           { $inc: { numFollowing: -1 }, $pull: { following: userId } }
+        );
+        await User.updateOne(
+          { _id: userId },
+          {
+            $inc: { numFollowers: -1, numNotifications: 1 },
+            $pull: {
+              followers: user._id,
+              notifications: {
+                $each: [
+                  {
+                    title: "Unfollowed",
+                    status: "You were unfollowed",
+                    user: user._id,
+                  },
+                ],
+              },
+            },
+          }
         );
         res.status(200).json("You remove the follow!");
       } else {
@@ -148,6 +166,24 @@ const followHandler = () =>
           {
             $inc: { numFollowing: 1 },
             $push: { following: userId },
+          }
+        );
+        await User.updateOne(
+          { _id: userId },
+          {
+            $inc: { numFollowers: 1, numNotifications: 1 },
+            $push: {
+              followers: user._id,
+              notifications: {
+                $each: [
+                  {
+                    title: "Followed",
+                    status: "You were followed",
+                    user: user._id,
+                  },
+                ],
+              },
+            },
           }
         );
         res.status(200).json("You start to follow!");
@@ -159,4 +195,78 @@ const followHandler = () =>
       });
     }
   });
-export { myProfile, updateProfile, getUser, getUsers, followHandler };
+
+const searchUsers = () =>
+  asyncHandler(async (req, res) => {
+    try {
+      console.log(req.query);
+      const result = await User.find({
+        $text: { $search: req.query.keyword },
+      });
+      res.status(200).json({ users: result });
+    } catch (error) {
+      res.status(400).json({
+        message: "No results",
+        stack: error.stack,
+      });
+    }
+  });
+
+const getFollowers = () =>
+  asyncHandler(async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id).select("-password");
+      const followers = user.followers.map((userId) => userId);
+      if (followers && followers.length > 0) {
+        const users = await User.find(...followers);
+        res.status(200).json(users);
+      }
+    } catch (error) {
+      res.status(400).json({
+        message: error.message,
+        stack: error.stack,
+      });
+    }
+  });
+
+const getFriends = () =>
+  asyncHandler(async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id).select("-password");
+      const following = user.following.map((userId) => userId);
+      if (following && following.length > 0) {
+        const users = await User.find(...following);
+        res.status(200).json(users);
+      }
+    } catch (error) {
+      res.status(400).json({
+        message: error.message,
+        stack: error.stack,
+      });
+    }
+  });
+
+const getNotifications = () =>
+  asyncHandler(async (req, res) => {
+    try {
+      const user = await User.findById(req.user._id).select("-password");
+      const notifications = user.notifications.map((userId) => userId);
+      res.status(200).json(notifications);
+    } catch (error) {
+      res.status(400).json({
+        message: error.message,
+        stack: error.stack,
+      });
+    }
+  });
+export {
+  myProfile,
+  updateProfile,
+  getUser,
+  getUsers,
+  followHandler,
+  searchUsers,
+  getFollowers,
+  getFriends,
+  getNotifications,
+};

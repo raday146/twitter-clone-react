@@ -1,18 +1,19 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useRef } from "react";
 import { Form, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
+  const searchRef = useRef("");
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const searchTerm = event.target.elements.search.value;
-    const searchQuery = encodeURIComponent(searchTerm);
-    history.push(`/search?q=${searchQuery}`);
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const searchQuery = encodeURIComponent(searchRef.current.value);
+    searchRef.current.value = "";
+    navigate(`/search?keyword=${searchQuery}`);
+  };
 
   return (
     <Form onSubmit={handleSubmit} className="form-inline w-100" role="search">
@@ -29,7 +30,7 @@ const SearchBar = () => {
             size="sm"
             type="search"
             placeholder="Search posts, #hashtags, or @users"
-            name="search"
+            ref={searchRef}
           />
         </InputGroup>
       </Form.Group>

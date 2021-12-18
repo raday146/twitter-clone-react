@@ -14,10 +14,14 @@ import styles from "../styles/HeaderStyle";
 
 const Header = ({ classes }) => {
   const { currentUser } = useAuthUser();
-  const { data: notifications } = useQuery("Notifications", getNotifications);
-  const notificationsCount = notifications?.filter
+  const { data: notifications } = useQuery(
+    ["Notifications", currentUser.token],
+    getNotifications
+  );
+  const notificationsCount = notifications
     ? notifications.filter((n) => !n.read).length
     : 0;
+
   console.log("header");
   return (
     <Col className={classes.root}>
@@ -31,12 +35,20 @@ const Header = ({ classes }) => {
       </div>
       <div>
         {headerList.map((item) => {
-          const badge = notificationsCount ? (
+          const badge = item.count ? (
             <>
+              {" "}
               <Badge
-                className="position-absolute"
-                //variant="light"
-                style={{ top: 5, right: 5, left: "unset" }}
+                className=" text-primary badge bg-white"
+                variant="light"
+                style={{
+                  top: 5,
+                  right: 4,
+                  left: "unset",
+                  margin: "6px",
+                  fontSize: "small",
+                  fontWeight: "bold",
+                }}
               >
                 {notificationsCount}
               </Badge>

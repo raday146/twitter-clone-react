@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Alert, Figure, Form, Modal, Row } from "react-bootstrap";
 import { useAuthUser } from "../context/authContext";
 import { validate } from "../utils/validate";
@@ -11,7 +11,7 @@ import {
 } from "../constants/cloudinary";
 const ProfileModalScreen = () => {
   const location = useLocation();
-  const history = useNavigate();
+  const navigate = useNavigate();
   const { currentUser } = useAuthUser();
   const [name, setName] = useState(currentUser?.user?.name);
   const [email, setEmail] = useState(currentUser?.user?.email);
@@ -27,9 +27,14 @@ const ProfileModalScreen = () => {
   const [showModal, setShowModel] = useState(true);
   const redirected = new URLSearchParams(location.search).get("redirected");
 
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/");
+    }
+  }, [currentUser, navigate]);
   const handleClose = () => {
     setShowModel(false);
-    history("/");
+    navigate("/");
   };
   async function handleSubmit(event) {
     try {

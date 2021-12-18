@@ -213,6 +213,18 @@ const setRepost = () =>
     }
   });
 
+const searchPosts = () =>
+  asyncHandler(async (req, res) => {
+    try {
+      const result = await Post.find({ $text: { $search: req.query.keyword } });
+      res.status(200).json({ posts: result });
+    } catch (error) {
+      res.status(400).json({
+        message: "No results",
+        stack: error.stack,
+      });
+    }
+  });
 export {
   getAllPosts,
   getPostById,
@@ -224,4 +236,5 @@ export {
   getRepostsByUser,
   aliasPostToFilter,
   setRepost,
+  searchPosts,
 };

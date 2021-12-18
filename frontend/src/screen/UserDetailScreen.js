@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { faCalendarAlt as faDate } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
 import { faLink } from "@fortawesome/free-solid-svg-icons/faLink";
 import { faLocationArrow as faLocation } from "@fortawesome/free-solid-svg-icons/faLocationArrow";
@@ -17,9 +17,11 @@ import { formatDate } from "../utils/date";
 import { useQueryClient } from "react-query";
 import { getUserById } from "../utils/apiClient";
 import styles from "../styles/UserDetailScreenStyle";
+import { useNavigate } from "react-router-dom";
 
 const UserDetailScreen = ({ classes }) => {
   const { userId } = useParams();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { currentUser } = useAuthUser();
   const data = queryClient.getQueryData("User-posts");
@@ -28,22 +30,27 @@ const UserDetailScreen = ({ classes }) => {
     loading,
     isSuccess,
   } = useQuery(["UserDetail", userId], getUserById);
-
   const posts = data;
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/");
+    }
+  }, [currentUser, navigate]);
 
   if (!user) {
     return <div className="message font-weight-bold">User not found</div>;
   }
 
   const isAuthUser = currentUser?.user?.name === user?.name;
-  const expanded_url = user?.urls[0];
-  const url = user?.urls[0];
+  const expanded_url = user?.urls && user.urls.length > 0 ? user.urls[1] : "";
+  const url = user?.urls ? user.urls[0] : "";
 
   return loading ? (
     <Spinner />
   ) : (
     <>
-      <Heading title={user.name} backButton />
+      <Heading title={user?.name} backButton />
       <Figure
         style={{
           height: "200px",
@@ -67,7 +74,9 @@ const UserDetailScreen = ({ classes }) => {
               Edit profile
             </Link>
           ) : (
-            <FollowButton user={user} />
+            <Col>
+              <FollowButton user={user} />
+            </Col>
           )}
         </Row>
         <div className="flex flex-column">
@@ -115,19 +124,16 @@ const UserDetailScreen = ({ classes }) => {
           </Col>
         </Row>
         <Row className="d-flex my-2">
-          <Link
-            to={`/user/${user?.name}/followers`}
-            className="text-muted mr-2"
-          >
-            {user.followersCount} <span>Followers</span>
+          <Link to={`/user/${user?._id}/followers`} className="text-muted mr-2">
+            {user.numFollowers} <span>Followers</span>
           </Link>
-          <Link to={`/user/${user?.name}/friends`} className="text-muted mr-2">
-            {user.friendsCount} <span>Following</span>
+          <Link to={`/user/${user?._id}/friends`} className="text-muted mr-2">
+            {user.numFollowing} <span>Following</span>
           </Link>
         </Row>
       </div>
       <h5 className="m-2 pb-2 border-bottom">
-        {user?.statusesCount} <span className="text-muted">Posts</span>
+        {posts && posts.length} <span className="text-muted">Posts</span>
       </h5>
       <PostsList posts={posts} isSuccess={isSuccess} />
     </>

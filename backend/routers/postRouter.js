@@ -10,9 +10,12 @@ import {
   getRepostsByUser,
   aliasPostToFilter,
   setRepost,
+  searchPosts,
 } from "../controllers/postController.js";
 
 router.get("/", aliasPostToFilter, getAllPosts());
+router.get("/search-result", searchPosts());
+
 router.get("/:id/all", aliasPostToFilter, getAllPosts());
 router.get("/:id", getPostById());
 router.route("/:id/like").get(getPostLikesByUser()).post(protect, setLikes());

@@ -22,10 +22,14 @@ const UnAuthApp = () => {
             lg="5"
           >
             <Routes>
+              <Route path="/signup" element={<RegisterScreen />} />
+              <Route path="/search" element={<SearchResultsScreen />} />
+              <Route path="/explore*" element={<ExploreScreen />} />
+              <Route path="/user/:userId" element={<UserDetailScreen />} />
+              <Route path="/post/:postId" element={<PostDetailScreen />} />
               <Route path="/" element={<LoginScreen />}>
                 <Route path="/login" element={<LoginScreen />} />
               </Route>
-              <Route path="/signup" element={<RegisterScreen />} />
             </Routes>
           </Col>
         </Row>

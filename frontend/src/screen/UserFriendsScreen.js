@@ -6,12 +6,12 @@ import { useParams } from "react-router";
 import { getFriends } from "../utils/apiClient";
 
 export default function UserFriendsScreen() {
-  const { username } = useParams();
+  const { userId } = useParams();
   const {
     data: users,
     isLoading,
     isSuccess,
-  } = useQuery("UserFriends", () => getFriends(username));
+  } = useQuery(["UserFriends", userId], getFriends);
 
   return (
     <>

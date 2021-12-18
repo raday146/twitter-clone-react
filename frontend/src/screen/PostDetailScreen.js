@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import Heading from "../components/Heading";
 import MultiMedia from "../components/MultiMedia";
 import PostsList from "../components/PostsList";
@@ -6,19 +7,21 @@ import PostText from "../components/PostText";
 import QuotedPost from "../components/QuotedPost";
 import ReactionsBar from "../components/ReactionsBar";
 import UserLink from "../components/UserLink";
-import React from "react";
 import { Col, Figure, Row } from "react-bootstrap";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import Divider from "@mui/material/Divider";
+import { useNavigate } from "react-router-dom";
+import { useAuthUser } from "../context/authContext";
 
 import { getPost, getUserById } from "../utils/apiClient";
 import { formatDate, formatTime } from "../utils/date";
 
 const PostDetailScreen = () => {
   const { postId } = useParams();
-
+  const { currentUser } = useAuthUser();
+  const navigate = useNavigate();
   const { data: post, loading } = useQuery(["PostDetail", postId], getPost);
   const { data: user, isLoading } = useQuery(
     ["Post-user", post?.user],
@@ -27,6 +30,12 @@ const PostDetailScreen = () => {
       enabled: Boolean(post?.user),
     }
   );
+
+  useEffect(() => {
+    if (!currentUser || !currentUser?.user) {
+      navigate("/");
+    }
+  }, [currentUser, currentUser?.user, navigate]);
 
   if (!post) {
     return <div className="message font-weight-bold">Post not found</div>;

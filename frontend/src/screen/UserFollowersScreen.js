@@ -6,22 +6,26 @@ import { useParams } from "react-router";
 import { getUserFollowers } from "../utils/apiClient";
 
 export default function UserFollowers() {
-  const { username } = useParams();
+  const { userId } = useParams();
   const {
     data: users,
     isLoading,
     isSuccess,
-  } = useQuery("UserFollowers", () => getUserFollowers(username));
-
+  } = useQuery(["UserFollowers", userId], getUserFollowers);
+  console.log(users && users.length > 0);
   return (
     <>
       <Heading title="Followers" backButton btnProfile />
-      <UserList
-        users={users}
-        isLoading={isLoading}
-        isSuccess={isSuccess}
-        noPop
-      />
+      {isSuccess && users && users.length > 0 ? (
+        <UserList
+          users={users}
+          isLoading={isLoading}
+          isSuccess={isSuccess}
+          noPop
+        />
+      ) : (
+        <div className="message">No Followers</div>
+      )}
     </>
   );
 }

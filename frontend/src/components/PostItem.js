@@ -1,25 +1,24 @@
+import React from "react";
 import MultiMedia from "./MultiMedia";
 import PostTag from "./PostTag";
 import PostText from "./PostText";
 import QuotedPost from "./QuotedPost";
 import ReactionsBar from "./ReactionsBar";
 import UserLink from "./UserLink";
-import React from "react";
 import { Figure, ListGroup, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { formatCreatedAt } from "../utils/date";
 import Spinner from "./Spinner";
-import { useAuthUser } from "../context/authContext";
 import Divider from "@mui/material/Divider";
 import { useQuery } from "react-query";
 import { getUserById } from "../utils/apiClient";
 
 const PostItem = ({ post, repost, ind, no_reply_tag }) => {
-  const { currentUser } = useAuthUser();
   const { data: user, loading } = useQuery(
     ["Post-user", post?.user],
     getUserById
   );
+
   return loading && !user ? (
     <Spinner />
   ) : (
@@ -35,10 +34,7 @@ const PostItem = ({ post, repost, ind, no_reply_tag }) => {
             className="bg-border-color rounded-circle mr-2 overflow-hidden"
             style={{ height: "50px", width: "50px" }}
           >
-            <Figure.Image
-              src={currentUser.user.avatar}
-              className="w-100 h-100"
-            />
+            <Figure.Image src={user?.avatar} className="w-100 h-100" />
           </Figure>
         </UserLink>
         <div className="media-body w-50">
@@ -48,9 +44,9 @@ const PostItem = ({ post, repost, ind, no_reply_tag }) => {
               to={`/user/${post?.user}`}
               className="text-dark font-weight-bold mr-1"
             >
-              {currentUser.user.name}
+              {user?.name}
             </UserLink>
-            <span className="text-muted mr-1">@{currentUser?.user.name}</span>
+            <span className="text-muted mr-1">@{user?.name}</span>
             <span className="text-muted my-2">
               {post && formatCreatedAt(post.createdAt)}
             </span>

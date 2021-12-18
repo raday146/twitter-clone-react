@@ -9,20 +9,22 @@ import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useAuthUser } from "../context/authContext";
 import { likePost, repostPost } from "../utils/apiClient";
+import { useNavigate } from "react-router-dom";
 
 const ReactionsBar = ({ post }) => {
   const { currentUser } = useAuthUser();
   const [signHaert, setSignHaert] = useState(false);
   const [signRePost, setSignRePost] = useState(false);
+  const navigate = useNavigate();
 
   const checkItems = useCallback(
     (items, op) => {
       if (op) {
-        return items?.filter((i) => i.user === currentUser.user._id).length;
+        return items?.filter((i) => i.user === currentUser?.user?._id).length;
       }
-      return items?.filter((i) => i === currentUser.user._id).length;
+      return items?.filter((i) => i === currentUser?.user?._id).length;
     },
-    [currentUser.user._id]
+    [currentUser?.user._id]
   );
 
   useEffect(() => {
@@ -38,12 +40,16 @@ const ReactionsBar = ({ post }) => {
     }
   }, [checkItems, post]);
 
+  const goLogin = () => {
+    console.log("ddd");
+    navigate("/");
+  };
   const handleToggleLike = async () => {
-    await likePost(currentUser.token, post._id);
+    await likePost(currentUser?.token, post._id);
   };
 
   const handleToggleRepost = async () => {
-    await repostPost(currentUser.token, post._id);
+    await repostPost(currentUser?.token, post._id);
   };
 
   return (
@@ -58,11 +64,11 @@ const ReactionsBar = ({ post }) => {
           ) : (
             <FontAwesomeIcon icon={faComment} />
           )}
-          <small className="m-1">{post.tweetCount}</small>
+          <small className="m-1">{post?.tweetCount}</small>
         </Dropdown.Toggle>
         <Dropdown.Menu alignRight className="higher-index rounded-0">
           <Dropdown.Item
-            onClick={handleToggleRepost}
+            onClick={(currentUser && handleToggleRepost) || goLogin}
             className="high-index"
             as="button"
           >
@@ -71,14 +77,14 @@ const ReactionsBar = ({ post }) => {
           <Dropdown.Item
             as={Link}
             className="high-index"
-            to={`/compose/post?quote=${post._id}`}
+            to={`/compose/post?quote=${post?._id}`}
           >
             Quote this post
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <Link
-        to={`/compose/post?reply_to=${post._id}`}
+        to={`/compose/post?reply_to=${post?._id}`}
         className="btn btn-naked-secondary rounded-pill high-index m-2"
       >
         <FontAwesomeIcon
@@ -88,7 +94,7 @@ const ReactionsBar = ({ post }) => {
         />
       </Link>
       <button
-        onClick={handleToggleLike}
+        onClick={(currentUser && handleToggleLike) || goLogin}
         className="btn btn-naked-danger rounded-pill high-index m-2"
       >
         {signHaert ? (
@@ -96,7 +102,7 @@ const ReactionsBar = ({ post }) => {
         ) : (
           <FontAwesomeIcon icon={faHeart} />
         )}
-        <small className="m-1">{post.numLikes}</small>
+        <small className="m-1">{post?.numLikes}</small>
       </button>
     </div>
   );

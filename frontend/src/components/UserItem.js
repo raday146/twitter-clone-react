@@ -39,14 +39,13 @@ const UserItem = ({ user, noPop, compact, classes }) => {
                 @{user?.name}
               </p>
             </Col>
-
             <Col>
               <FollowButton user={user} />
             </Col>
           </Row>
           <Row>
             {!compact && (
-              <blockquote className="mb-0 mt-n2">
+              <blockquote className="mb-0 mt-n2 py-3">
                 {truncateText(user.bio, 7)}
               </blockquote>
             )}

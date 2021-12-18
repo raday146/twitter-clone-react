@@ -39,10 +39,7 @@ const CreatePost = () => {
   return (
     <div className="p-2 mt-2 m-3">
       <div className="media">
-        <Link
-          className="rounded-circle"
-          to={`/user/${currentUser?.user?.name}`}
-        >
+        <Link className="rounded-circle" to={`/user/${currentUser?.user?._id}`}>
           <img
             className="rounded-circle"
             src={currentUser?.user?.avatar}
