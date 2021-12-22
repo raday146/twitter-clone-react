@@ -13,7 +13,7 @@ node_modules/
 # production
 /client/build
 
-/config.env
+
 # misc
 .DS_Store
 .env
