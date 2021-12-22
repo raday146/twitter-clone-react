@@ -7,10 +7,20 @@ const styles = {
       padding: 2,
       fill: "white",
       alignItems: "center",
+      //display: "flex",
+      //cursor: "pointer",
     },
     "& span": {
-      fontWeight: "lighter",
+      fontWeight: "bold",
       lineHeight: 1.5,
+      //  display: "contents",
+    },
+    "& a:hover": {
+      backgroundColor: "#e8f5fe",
+      borderRadius: "30px",
+
+      // color: "var(--twiter-color)",
+      transition: "color 100ms ease-out",
     },
   },
   brand: {
@@ -22,6 +32,8 @@ const styles = {
     flexDirection: "column !important",
     textDecoration: "none",
     alignItems: "center",
+    //display: "constants",
+
     paddingRight: "4rem !important",
     [sizes.headerLinksDown("lg")]: {
       paddingRight: ".5rem !important",
@@ -29,6 +41,18 @@ const styles = {
   },
   postBtn: {
     margin: "5px",
+  },
+  badge: {
+    //fontSize: "small",
+    //fontWeight: "bold",
+    //position: "fixed",
+    // display: "constants",
+    // top: 5,
+    //right: 4,
+    //left: "unset",
+    margin: "1px",
+    fontSize: "small",
+    display: "contents",
   },
 };
 export default styles;
