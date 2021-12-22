@@ -38,18 +38,9 @@ const Header = ({ classes }) => {
             <>
               {" "}
               <Badge
-                className=" text-primary badge bg-white"
-                variant="light"
-                style={{
-                  top: 5,
-                  right: 4,
-                  left: "unset",
-                  margin: "6px",
-                  fontSize: "small",
-                  fontWeight: "bold",
-                }}
+                className={`${classes.badge} text-primary badge bg-white"  variant="light"`}
               >
-                {notificationsCount}
+                {notificationsCount > 0 ? notificationsCount : ""}
               </Badge>
               <span className="sr-only">new items</span>
             </>
@@ -59,19 +50,19 @@ const Header = ({ classes }) => {
               key={item.name}
               className="d-flex align-items-top position-relative"
             >
+              {badge}
               <NavLink
                 to={
                   item.name === "Profile"
                     ? `${item.href}/${currentUser?.user?._id}`
                     : item.href
                 }
-                className={`${classes.hedarLinks} p-1 mx-lg-1 py-xl-2 mb-1 btn-lg btn-secondary rounded-pill `}
+                className={`${classes.hedarLinks}  p-1 mx-lg-1 py-xl-2 mb-1 btn-lg btn-secondary rounded-pill `}
                 activeClassName="active"
               >
                 <FontAwesomeIcon className="m-2" size="lg" icon={item.icon} />
                 <span className="d-none d-xl-block my-3">{item.name}</span>
               </NavLink>
-              {badge}
             </div>
           );
         })}
