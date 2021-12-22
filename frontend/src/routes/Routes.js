@@ -11,8 +11,6 @@ import UserFollowersScreen from "../screen/UserFollowersScreen"; //pages/UserFol
 import UserFriendsScreen from "../screen/UserFriendsScreen"; //pages/UserFriends";
 import HomeScreen from "../screen/HomeScreen"; //pages/Home";
 import ProfileModalScreen from "../screen/ProfileModalScreen"; //pages/ProfileModal";
-import LoginScreen from "../screen/LoginScreen"; //pages/Login";
-import RegisterScreen from "../screen/RegisterScreen";
 import { Col, Row } from "react-bootstrap";
 import MediaQuery from "react-responsive";
 import Sidebar from "../components/Sidebar";

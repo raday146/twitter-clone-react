@@ -28,26 +28,6 @@ export const loginApi = async (email, password) => {
     return error.message;
   }
 };
-/*
-export const login = async (email, password) => {
-  console.log("befor");
-  try {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    const { data } = await axios.post(
-      "/api/users/login",
-      { email, password },
-      config
-    );
-    window.localStorage.setItem("AuthProvider", JSON.stringify(data));
-    window.location.pathname = "/home";
-  } catch (error) {
-    return error.message;
-  }
-};*/
 
 export const signUp = async (name, email, password) => {
   try {
@@ -274,7 +254,7 @@ export const setHandlerFollow = async (token, id) => {
     await queryClient.invalidateQueries("suggestions");
     await queryClient.invalidateQueries("Posts");
     await queryClient.invalidateQueries("UserDetail");
-    await queryClient.invalidateQueries("notifications");
+    await queryClient.invalidateQueries("Notifications");
   } catch (error) {
     return error.response && error.response.data.message
       ? error.response.data.message
@@ -324,7 +304,6 @@ export const getUserFollowers = async ({ queryKey }) => {
   try {
     const id = queryKey[1];
     const { data } = await axios.get(`/api/users/${id}/followers`);
-    console.log("327 api ", data);
     return data;
   } catch (error) {
     return error.response && error.response.data.message
@@ -362,4 +341,25 @@ export const getNotifications = async ({ queryKey }) => {
       : error.message;
   }
 };
-export const readNotification = async () => {};
+export const readNotification = async (token, notification) => {
+  try {
+    if (notification.read) {
+      return;
+    }
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios.put("/api/users/readnotification", notification, config);
+    await queryClient.invalidateQueries("Notifications");
+    await queryClient.invalidateQueries("suggestions");
+    await queryClient.invalidateQueries("Posts");
+    await queryClient.invalidateQueries("UserDetail");
+  } catch (error) {
+    return error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+  }
+};

@@ -62,6 +62,7 @@ const createPost = () =>
         user: req.user._id,
         hashtags: String(hashtags),
       });
+
       const id = newPost._id;
       if (hashtags.length > 0) {
         console.log("in if");
@@ -89,8 +90,6 @@ const createPost = () =>
       });
     }
   });
-const editPost = () => asyncHandler(async (req, res, next) => {});
-const deletePostById = () => asyncHandler(async (req, res, next) => {});
 const setLikes = () =>
   asyncHandler(async (req, res, next) => {
     try {
@@ -117,6 +116,25 @@ const setLikes = () =>
         post.likes.push(like);
         post.numLikes = post.likes.length;
         await post.save();
+
+        await User.updateOne(
+          { _id: post.user },
+          {
+            $inc: { numNotifications: 1 },
+            $push: {
+              notifications: {
+                $each: [
+                  {
+                    title: "Liked",
+                    status: "You were Liked",
+                    user: req.user._id,
+                    post: post._id,
+                  },
+                ],
+              },
+            },
+          }
+        );
         res.status(201).json({
           message: "like added",
         });
@@ -225,6 +243,9 @@ const searchPosts = () =>
       });
     }
   });
+
+const editPost = () => asyncHandler(async (req, res, next) => {});
+const deletePostById = () => asyncHandler(async (req, res, next) => {});
 export {
   getAllPosts,
   getPostById,

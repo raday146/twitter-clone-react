@@ -249,8 +249,13 @@ const getFriends = () =>
 const getNotifications = () =>
   asyncHandler(async (req, res) => {
     try {
-      const user = await User.findById(req.user._id).select("-password");
-      const notifications = user.notifications.map((userId) => userId);
+      console.log("get");
+
+      const user = await User.findById(req.user._id)
+        .populate("notifications.user", "name , avatar")
+        .populate("notifications.post")
+        .select("-password");
+      const notifications = user.notifications.map((n) => n);
       res.status(200).json(notifications);
     } catch (error) {
       res.status(400).json({
@@ -259,6 +264,33 @@ const getNotifications = () =>
       });
     }
   });
+
+const readNotification = () =>
+  asyncHandler(async (req, res) => {
+    try {
+      const { _id } = req.body;
+      console.log(_id);
+      await User.updateMany(
+        { _id: req.user._id },
+        {
+          $set: { "notifications.$[elem].read": true },
+          $inc: { numNotifications: -1 },
+        },
+        { arrayFilters: [{ "elem._id": { $eq: _id } }], upsert: true }
+      );
+
+      res.status(200).json({
+        message: "notification readed",
+      });
+    } catch (error) {
+      console.log(error.stack);
+      res.status(400).json({
+        message: error.message,
+        stack: error.stack,
+      });
+    }
+  });
+
 export {
   myProfile,
   updateProfile,
@@ -269,4 +301,5 @@ export {
   getFollowers,
   getFriends,
   getNotifications,
+  readNotification,
 };

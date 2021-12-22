@@ -1,7 +1,6 @@
 import { faTwitter } from "@fortawesome/free-brands-svg-icons/faTwitter";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Col } from "react-bootstrap";
 import { useQuery } from "react-query";
 import MediaQuery from "react-responsive";
@@ -66,7 +65,6 @@ const Header = ({ classes }) => {
                     ? `${item.href}/${currentUser?.user?._id}`
                     : item.href
                 }
-                //className="px-xl-1 py-xl-1 p-1 mb-1 mx-lg-0 mx-auto btn btn-naked-primary rounded-pill font-weight-bold btn-lg d-flex align-items-center"
                 className={`${classes.hedarLinks} p-1 mx-lg-1 py-xl-2 mb-1 btn-lg btn-secondary rounded-pill `}
                 activeClassName="active"
               >

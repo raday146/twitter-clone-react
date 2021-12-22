@@ -1,3 +1,4 @@
+import React from "react";
 import { useAuthUser } from "./context/authContext";
 import AuthApp from "./app/AuthApp";
 import UnAuthApp from "./app/UnAuthApp";
@@ -9,7 +10,6 @@ function App() {
     return <UnAuthApp />;
   } else {
     console.log("AuthApp");
-
     return <AuthApp />;
   }
 }

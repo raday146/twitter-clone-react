@@ -7,30 +7,31 @@ import { useAuthUser } from "../context/authContext";
 import { readNotification } from "../utils/apiClient";
 
 export default function NotificationItem({ notification }) {
-  const authUser = useAuthUser();
+  const { currentUser } = useAuthUser();
 
-  function handleReadNotification() {
+  const handleReadNotification = async () => {
     if (!notification.read) {
-      readNotification(notification);
+      await readNotification(currentUser.token, notification);
     }
-  }
+  };
 
   const active = notification.read
     ? ""
     : "bg-bg-color border-left-right-primary-custom";
-  const { post, user } = notification.body;
+  const { post, user } = notification;
+  console.log(user);
   let body;
   let heading;
   let anchor = "/notifications";
   let tag = notification.title;
 
-  switch (notification.type) {
-    case "mentioned":
-      anchor = `/post/${post.id_str}`;
+  switch (notification?.title) {
+    case "Mentioned":
+      anchor = `/post/${post._id}`;
       body = (
         <div className="d-flex flex-column">
           <p>
-            <b>@{post.user.screen_name}</b> mentioned you in post
+            <b>@{post?.author}</b> mentioned you in post
           </p>
           <blockquote className="bg-light mt-n2 p-2 border-left-right-secondary-custom">
             <PostText post={post} />
@@ -38,54 +39,54 @@ export default function NotificationItem({ notification }) {
         </div>
       );
       break;
-    case "replied":
-      anchor = `/post/${post.id_str}`;
+    case "Replied":
+      anchor = `/post/${post?._id}`;
       body = (
         <div className="d-flex flex-column">
           <p>
-            <b>@{post.user.screen_name}</b> replied
+            <b>@{post?.author}</b> replied
           </p>
           <QuotePost post={post} />
         </div>
       );
       break;
-    case "liked":
-      anchor = `/post/${post.id_str}/likes`;
+    case "Liked":
+      anchor = `/post/${post?._id}/likes`;
       body = (
         <div className="d-flex flex-column">
           <p>
-            <b>@{user.screen_name}</b> liked
+            <b>@{user?.name}</b> liked
           </p>
           <QuotePost post={post} />
         </div>
       );
       break;
-    case "followed":
-      anchor = `/user/${authUser?.screen_name}/followers`;
+    case "Followed":
+      anchor = `/user/${user?._id}/followers`;
       body = (
         <div className="d-flex flex-column">
           <p>
-            <b>@{user.screen_name}</b> started following you
+            <b>@{user?.name}</b> started following you
           </p>
         </div>
       );
       break;
-    case "unfollowed":
-      anchor = `/user/${user.screen_name}`;
+    case "Unfollowed":
+      anchor = `/user/${user?._id}`;
       body = (
         <div className="d-flex flex-column">
           <p>
-            <b>@{user.screen_name}</b> no longer follows you
+            <b>@{user?.name}</b> no longer follows you
           </p>
         </div>
       );
       break;
-    case "reposted":
-      anchor = `/post/${post.id_str}/reposts`;
+    case "Reposted":
+      anchor = `/post/${post?._id}/reposts`;
       body = (
         <div className="d-flex flex-column">
           <p>
-            <b>@{user.screen_name}</b> reposted
+            <b>@{user?._id}</b> reposted
           </p>
           <QuotePost post={post} />
         </div>
@@ -98,21 +99,17 @@ export default function NotificationItem({ notification }) {
   if (user) {
     heading = (
       <div className="d-flex">
-        <Link to={`/user/${user.screen_name}`}>
+        <Link to={`/user/${user?._id}`}>
           <Figure
             className="bg-border-color rounded-circle overflow-hidden mr-1 mb-2"
             style={{ height: "45px", width: "45px" }}
           >
-            <Figure.Image
-              src={user.profile_image_url_https}
-              className="w-100 h-100"
-            />
+            <Figure.Image src={user?.avatar} className="w-100 h-100" />
           </Figure>
         </Link>
       </div>
     );
   }
-
   return (
     <ListGroup.Item
       onClick={handleReadNotification}

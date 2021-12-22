@@ -4,7 +4,6 @@ import { withStyles } from "@material-ui/styles";
 import styles from "../styles/RegisterScreenStyle";
 import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "../utils/apiClient";
-import FormContainer from "../components/FormContainer";
 import Splash from "../components/Splash";
 import { useAuthUser } from "../context/authContext";
 
@@ -14,9 +13,7 @@ const RegisterScreen = ({ classes, location }) => {
   const navigate = useNavigate();
   const { currentUser } = useAuthUser();
   const redirect = location?.search ? location.search.split("=")[1] : "/login";
-  /*const registerMutation = useMutation(signup, {
-    onSuccess: () => queryClient.invalidateQueries("AuthProvider"),
-  });*/
+
   useEffect(() => {
     if (!!currentUser) {
       navigate("/home");
@@ -59,88 +56,89 @@ const RegisterScreen = ({ classes, location }) => {
     }
   };
   return (
-    <Row>
-      {loading && <Splash />}
-      <Col className={`${classes.root} mx-auto border px-3 pb-3`}>
-        <Figure className="d-flex flex-column align-items-center">
-          <Figure.Image
-            style={{ padding: "2em" }}
-            width={200}
-            height={200}
-            src="/img/twitter-splash.png"
-            alt="Twitter Logo"
-          />
-        </Figure>
-        <h5 className="font-weight-bolder">See what’s happening now.</h5>
-        <fieldset disabled={loading}>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="name" className="my-2">
-              <Form.Label>
-                Choose a username -{" "}
-                <small className="text-muted">required</small>
-              </Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
-                autoCapitalize="off"
-                autoComplete="off"
-              ></Form.Control>
-            </Form.Group>
-            <Form.Group controlId="email" className="my-2">
-              <Form.Label>
-                E-mail - <small className="text-muted">optional</small>
-              </Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                autoCapitalize="on"
-              ></Form.Control>
-            </Form.Group>
-            <Form.Group controlId="password" className="my-2">
-              <Form.Label>
-                Choose a password -{" "}
-                <small className="text-muted">required</small>
-              </Form.Label>
-              <Form.Control type="password" name="password"></Form.Control>
-            </Form.Group>
-            <Form.Group controlId="ConfirmPassword" className="my-2">
-              <Form.Label>
-                Confirm your password -{" "}
-                <small className="text-muted">required</small>
-              </Form.Label>
-              <Form.Control
-                type="password"
-                name="ConfirmPassword"
-              ></Form.Control>
-            </Form.Group>
-            <p className="mt-n2">
-              <small>
-                Already have an account? <Link to="/login">Log in instead</Link>
-              </small>
-              <br />
-              <small className="text-danger">{error}</small>
-            </p>
-            <div className="d-flex flex-column align-items-center">
-              <button
-                type="submit"
-                className={`${classes.button} btn btn-outline-primary rounded-pill`}
-              >
-                <span>Sign up</span>
-              </button>
-              <div className="seperator">
-                <span>or</span>
+    (loading && <Splash />) || (
+      <Row>
+        <Col className={`${classes.root} mx-auto border mt-5`}>
+          <Figure className="d-flex flex-column align-items-center">
+            <Figure.Image
+              width={120}
+              height={120}
+              src="/img/twitter-splash.png"
+              alt="Twitter Logo"
+            />
+          </Figure>
+          <h5 className="font-weight-bolder">See what’s happening now.</h5>
+          <fieldset disabled={loading}>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group controlId="name" className="my-2">
+                <Form.Label>
+                  Choose a username -{" "}
+                  <small className="text-muted">required</small>
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  name="name"
+                  autoCapitalize="off"
+                  autoComplete="off"
+                ></Form.Control>
+              </Form.Group>
+              <Form.Group controlId="email" className="my-2">
+                <Form.Label>
+                  E-mail - <small className="text-muted">optional</small>
+                </Form.Label>
+                <Form.Control
+                  type="email"
+                  name="email"
+                  autoCapitalize="on"
+                ></Form.Control>
+              </Form.Group>
+              <Form.Group controlId="password" className="my-2">
+                <Form.Label>
+                  Choose a password -{" "}
+                  <small className="text-muted">required</small>
+                </Form.Label>
+                <Form.Control type="password" name="password"></Form.Control>
+              </Form.Group>
+              <Form.Group controlId="ConfirmPassword" className="my-2">
+                <Form.Label>
+                  Confirm your password -{" "}
+                  <small className="text-muted">required</small>
+                </Form.Label>
+                <Form.Control
+                  type="password"
+                  name="ConfirmPassword"
+                ></Form.Control>
+              </Form.Group>
+              <p className="mt-n2">
+                <small>
+                  Already have an account?{" "}
+                  <Link to="/login">Log in instead</Link>
+                </small>
+                <br />
+                <small className="text-danger">{error}</small>
+              </p>
+              <div className="d-flex flex-column align-items-center p-1 py-1">
+                <button
+                  type="submit"
+                  className={`${classes.button} btn btn-outline-primary rounded-pill`}
+                >
+                  <span>Sign up</span>
+                </button>
+                <div className="seperator">
+                  <span>or</span>
+                </div>
+                <Link
+                  to="/login"
+                  className={`${classes.button} btn btn-primary  rounded-pill `}
+                >
+                  <span>Log in</span>
+                </Link>
               </div>
-              <Link
-                to="/login"
-                className={`${classes.button} btn btn-primary  rounded-pill`}
-              >
-                <span>Log in</span>
-              </Link>
-            </div>
-          </Form>
-        </fieldset>
-      </Col>
-    </Row>
+            </Form>
+          </fieldset>
+        </Col>
+      </Row>
+    )
   );
 };
 

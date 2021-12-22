@@ -23,7 +23,6 @@ export default function NotificationsScreen() {
     }
   }, [currentUser, navigate]);
   if (isLoading) return <Spinner />;
-  console.log(notifications);
   return (
     <>
       <Heading title="Notifications" btnProfile backButton />

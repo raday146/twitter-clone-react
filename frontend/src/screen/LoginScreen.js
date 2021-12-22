@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Col, Figure, Form } from "react-bootstrap";
+import { Col, Figure, Form, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../utils/apiClient";
 import { useAuthUser } from "../context/authContext";
@@ -15,7 +15,7 @@ const LoginScreen = ({ classes }) => {
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     try {
       e.preventDefault();
       setLoading(true);
@@ -40,67 +40,67 @@ const LoginScreen = ({ classes }) => {
     } finally {
       setLoading(false);
     }
-  }
+  };
+  //className="d-flex flex-column align-items-center">
 
   return (
-    <Col className={`${classes.root} mx-auto border px-3 pb-3 `}>
-      <Figure className="d-flex flex-column align-items-center">
-        <Figure.Image
-          width={200}
-          height={200}
-          style={{ padding: "2em" }}
-          src="/img/twitter-splash.png"
-          alt="Twitter Logo"
-        />
-      </Figure>
-      <h5 className="font-weight-bolder">See what’s happening now.</h5>
-      <fieldset disabled={loading}>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="username">
-            <Form.Label>E-mail</Form.Label>
-            <Form.Control
-              type="email"
-              //name="email"
-              ref={emailRef}
-              placeholder="Enter email"
-              autoCapitalize="off"
-            />
-          </Form.Group>
-          <Form.Group className="mb-0" controlId="password">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              autoCorrect="off"
-              type="password"
-              //name="password"
-              ref={passwordRef}
-              placeholder="Enter Password"
-            />
-          </Form.Group>
-          <p>
-            <small>
-              <Link to="/help">Forgot password?</Link>
-            </small>
-            <br />
-            <small className="text-danger">{error}</small>
-          </p>
-          <div className="d-flex flex-column align-items-center">
-            <button
-              type="submit"
-              className={`${classes.button} btn btn-outline-primary rounded-pill`}
-            >
-              Log in
-            </button>
-            <small className="text-muted m-2">or</small>
-            <Link
-              to="/signup"
-              className={`${classes.button} btn btn-primary  rounded-pill`}
-            >
-              Sign up
-            </Link>
-          </div>
-        </Form>
-      </fieldset>
-    </Col>
+    <>
+      <Col className={`${classes.form}  px-3 mt-5 py-5`}>
+        <Figure className="d-flex flex-column align-items-center">
+          <Figure.Image
+            width={120}
+            height={120}
+            src="/img/twitter-splash.png"
+            alt="Twitter Logo"
+          />
+        </Figure>
+        <h5 className="font-weight-bolder">See what’s happening now.</h5>
+        <fieldset disabled={loading}>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-4" controlId="username">
+              <Form.Label>E-mail</Form.Label>
+              <Form.Control
+                type="email"
+                ref={emailRef}
+                placeholder="Enter email"
+                autoCapitalize="off"
+              />
+            </Form.Group>
+            <Form.Group className="mb-5" controlId="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                autoCorrect="off"
+                type="password"
+                ref={passwordRef}
+                placeholder="Enter Password"
+              />
+            </Form.Group>
+            <p>
+              <small>
+                <Link to="/help">Forgot password?</Link>
+              </small>
+              <br />
+              <small className="text-danger">{error}</small>
+            </p>
+            <div className="d-flex flex-column align-items-center mb-4 py-2">
+              <button
+                type="submit"
+                className={`${classes.button} btn btn-outline-primary rounded-pill mb-1`}
+              >
+                Log in
+              </button>
+              <small className="text-muted ">or</small>
+              <Link
+                to="/signup"
+                className={`${classes.button} btn btn-primary  rounded-pill`}
+              >
+                Sign up
+              </Link>
+            </div>
+          </Form>
+        </fieldset>
+      </Col>
+    </>
   );
 };
 

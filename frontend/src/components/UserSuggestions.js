@@ -1,14 +1,16 @@
-import UsersList from "./UsersList";
 import React from "react";
+import UsersList from "./UsersList";
 import { useQuery } from "react-query";
 import { suggestionsToUser } from "../utils/apiClient";
-
+import { useAuthUser } from "../context/authContext";
 const UserSuggestions = (props) => {
+  const { currentUser } = useAuthUser();
   const { userId, following, ...rest } = props;
   const { data, isLoading, isSuccess } = useQuery(
     "suggestions",
     suggestionsToUser
   );
+
   const arr = ["israel", "shlomo", "yakov", "nati"];
   const users = data?.filter(
     (user) => !following?.includes(user._id) && !String(user._id).match(userId)

@@ -1,6 +1,4 @@
 import React, { useContext, createContext, useState, useEffect } from "react";
-import { useQuery } from "react-query";
-import { authenticate } from "../utils/apiClient";
 import { loginApi, logout } from "../utils/apiClient";
 
 import Splash from "../components/Splash";
@@ -8,7 +6,7 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const loginUser = async (email, password) => {
     try {
@@ -24,7 +22,6 @@ export function AuthProvider({ children }) {
     try {
       window.localStorage.removeItem("AuthProvider");
       logout();
-      console.log("logout");
       setCurrentUser(null);
     } catch (error) {
       return error.message;
@@ -32,13 +29,15 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
     const data = window.localStorage.getItem("AuthProvider")
       ? JSON.parse(window.localStorage.getItem("AuthProvider"))
       : null;
 
     if (!!data && !!!currentUser) {
       setCurrentUser(data);
-      setLoading(false);
     }
   }, [currentUser]);
 
@@ -49,7 +48,7 @@ export function AuthProvider({ children }) {
   };
   return (
     <AuthContext.Provider value={value}>
-      {loading ? <Splash /> : children}
+      {(loading && <Splash />) || children}
     </AuthContext.Provider>
   );
 }

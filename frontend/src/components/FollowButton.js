@@ -16,7 +16,11 @@ const FollowButton = ({ user }) => {
 
   useEffect(() => {
     if (!!currentUser) {
-      if (!currentUser?.user?.following.includes(user._id)) {
+      if (currentUser.user._id === user._id) {
+        setFollow(false);
+        textRef.current = "";
+        setLoadingTAG(false);
+      } else if (!currentUser?.user?.following.includes(user._id)) {
         setFollow(false);
         textRef.current = "Follow";
         setLoadingTAG(false);
@@ -65,6 +69,7 @@ const FollowButton = ({ user }) => {
   return (
     (loadingTAG && <Spinner />) || (
       <Button
+        disabled={currentUser.user._id === user._id}
         onClick={(currentUser && followHandler) || goLogin}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

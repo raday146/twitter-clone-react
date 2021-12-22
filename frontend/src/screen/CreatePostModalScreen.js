@@ -39,11 +39,11 @@ const CreatePostModalScreen = ({ location }) => {
     }
   }, [currentUser, navigate, redirect]);
 
-  function handleChange(event) {
+  const handleChange = (event) => {
     setDisabled(!isTextValid(textRef.current.value));
-  }
+  };
 
-  async function handleSubmit() {
+  const handleSubmit = async () => {
     try {
       if (disabled) return;
       const content = validate(textRef.current.value.trim(), "html", {
@@ -73,15 +73,15 @@ const CreatePostModalScreen = ({ location }) => {
     } catch (error) {
       setError(error.message);
     }
-  }
+  };
 
-  function handleCloseModal() {
+  const handleCloseModal = () => {
     navigate(-1);
-  }
+  };
 
-  function addEmoji(emoji) {
+  const addEmoji = (emoji) => {
     textRef.current.value = textRef.current.value + emoji.native;
-  }
+  };
 
   const picker = (
     <Popover id="popover-basic">

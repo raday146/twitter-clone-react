@@ -4,10 +4,9 @@ import { withStyles } from "@material-ui/styles";
 import styles from "../styles/splashStyle";
 
 const Splash = ({ classes }) => {
-  console.log("img");
   return (
-    <div className={`${classes.root}`}>
-      <img1111
+    <div className={`${classes.root} vw-100 d-flex`}>
+      <img
         className="m-auto"
         width={75}
         heigh={75}

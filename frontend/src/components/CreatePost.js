@@ -17,7 +17,7 @@ const CreatePost = () => {
     setDisabled(!!!isTextValid(textRef.current.value));
   }
 
-  async function handleSubmit() {
+  const handleSubmit = async () => {
     try {
       if (disabled) {
         return;
@@ -34,7 +34,7 @@ const CreatePost = () => {
     } catch (error) {
       alert(error.message);
     }
-  }
+  };
 
   return (
     <div className="p-2 mt-2 m-3">

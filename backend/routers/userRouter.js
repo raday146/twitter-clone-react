@@ -16,6 +16,7 @@ import {
   getFollowers,
   getFriends,
   getNotifications,
+  readNotification,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -49,14 +50,7 @@ router.get("/:id/friends", getFriends());
 router.use(protect);
 router.post("/:id/follow", followHandler());
 router.post("/notifications", getNotifications());
+router.put("/readnotification", readNotification());
 router.route("/profile").get(myProfile()).put(updateProfile());
 
-/*
-.patch(updatePassword());
-
-router.use(restriction);
-router.route("/:id").get(getUserById()).put(updateUser()).delete(deleteUser());
-
-router.get("/", getUsers);
-*/
 export default router;

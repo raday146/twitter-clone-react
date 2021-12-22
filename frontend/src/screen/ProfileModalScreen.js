@@ -36,7 +36,7 @@ const ProfileModalScreen = () => {
     setShowModel(false);
     navigate("/");
   };
-  async function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     try {
       event.preventDefault();
       setLoading(true);
@@ -73,9 +73,9 @@ const ProfileModalScreen = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  async function uploadProfileImage(event) {
+  const uploadProfileImage = async (event) => {
     const file = event.target.files[0];
     if (file) {
       const uploadAvatar = await uploadMedia({
@@ -85,9 +85,9 @@ const ProfileModalScreen = () => {
       });
       setAvatar(uploadAvatar);
     }
-  }
+  };
 
-  async function uploadCoverImage(event) {
+  const uploadCoverImage = async (event) => {
     const file = event.target.files[0];
     if (file) {
       const uploadBanner = await uploadMedia({
@@ -97,7 +97,7 @@ const ProfileModalScreen = () => {
       });
       setBanner(uploadBanner);
     }
-  }
+  };
 
   return (
     <Modal
