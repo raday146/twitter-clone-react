@@ -12,8 +12,10 @@ import Spinner from "./Spinner";
 import Divider from "@mui/material/Divider";
 import { useQuery } from "react-query";
 import { getUserById } from "../utils/apiClient";
+import { withStyles } from "@material-ui/styles";
+import styles from "../styles/PostItemStyle";
 
-const PostItem = ({ post, repost, ind, no_reply_tag }) => {
+const PostItem = ({ post, repost, ind, no_reply_tag, classes }) => {
   const { data: user, loading } = useQuery(
     ["Post-user", post?.user],
     getUserById
@@ -24,10 +26,10 @@ const PostItem = ({ post, repost, ind, no_reply_tag }) => {
   ) : (
     <ListGroup.Item className="px-3" action as="div">
       <Link className="stretched-link" to={`/post/${post._id}`} />
-      <div className="media mb-n2 w-100 my-3">
+      <div className="media">
         <UserLink
           user={user}
-          className="rounded-circle"
+          className={`${classes.aLink} rounded-circle`}
           to={`/user/${post?.user}`}
         >
           <Figure
@@ -37,8 +39,8 @@ const PostItem = ({ post, repost, ind, no_reply_tag }) => {
             <Figure.Image src={user?.avatar} className="w-100 h-100" />
           </Figure>
         </UserLink>
-        <div className="media-body w-50">
-          <Row className="d-flex align-items-center">
+        <div className={`${classes.divLNS} media-body w-50`}>
+          <Row className={`${classes.LNS} align-items-center`}>
             <UserLink
               user={user}
               to={`/user/${post?.user}`}
@@ -78,4 +80,4 @@ const PostItem = ({ post, repost, ind, no_reply_tag }) => {
     </ListGroup.Item>
   );
 };
-export default PostItem;
+export default withStyles(styles)(PostItem);

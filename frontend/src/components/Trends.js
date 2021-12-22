@@ -22,7 +22,7 @@ const Trends = ({ length }) => {
               key={trend?.name}
               as={Link}
               action
-              to={`/search?q=${trend?.name}`}
+              to={`/search?keyword=${trend?.name}`}
             >
               <small className="text-muted">Trending Worldwide</small>
               <p className="mb-1 text-dark font-weight-bold text-capitalize">
