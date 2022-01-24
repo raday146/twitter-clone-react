@@ -25,7 +25,6 @@
     Express.js bills itself as a “fast, unopinionated, minimalist web framework for Node.js,” and that is indeed exactly what it is. 
     Express.js has powerful models for URL routing (matching an incoming URL with a server function), and handling HTTP requests and responses. 
   * JWT (JSON Web Token) JSON Object which is used to securely transfer information, authentication system over the web.
-  * Paypal sandbox integration (fake paypal for testing).
   
   ## MongoDB Database 👈
    * mongoDB (stores and mangae the data of the app)
