@@ -19,7 +19,7 @@
       * React-JSS  (style the components by css with JS,allows to describe styles in a more descriptive).
       * Hooks (allow to "hook" into React features such as state and lifecycle methods).
       
-  ## Beckend (Express.js and Node.js) 👈
+  ## Beckend (Express.js, Node.js) 👈
 
   * Express.js server-side framework, running inside a Node.js server. 
     Express.js bills itself as a “fast, unopinionated, minimalist web framework for Node.js,” and that is indeed exactly what it is. 
